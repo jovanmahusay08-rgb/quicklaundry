@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::table('payments', function (Blueprint $table) {
             $table->dropColumn('payment_method');
+        });
+        Schema::table('payments', function (Blueprint $table) {
             $table->dropColumn('status');
         });
 
@@ -29,6 +31,8 @@ return new class extends Migration
     {
         Schema::table('payments', function (Blueprint $table) {
             $table->dropColumn('payment_method');
+        });
+        Schema::table('payments', function (Blueprint $table) {
             $table->dropColumn('status');
         });
 

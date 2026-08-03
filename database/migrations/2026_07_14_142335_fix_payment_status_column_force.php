@@ -12,8 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Use raw SQL to modify the payment_status column from enum to varchar
-        DB::statement("ALTER TABLE bookings MODIFY COLUMN payment_status VARCHAR(255) DEFAULT 'Unpaid'");
+        if (DB::getDriverName() === 'sqlite') {
+            Schema::table('bookings', function (Blueprint $table) {
+                $table->string('payment_status')->default('Unpaid')->change();
+            });
+        } else {
+            // Use raw SQL to modify the payment_status column from enum to varchar
+            DB::statement("ALTER TABLE bookings MODIFY COLUMN payment_status VARCHAR(255) DEFAULT 'Unpaid'");
+        }
     }
 
     /**
@@ -21,6 +27,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement("ALTER TABLE bookings MODIFY COLUMN payment_status ENUM('Unpaid', 'Paid', 'Refunded') DEFAULT 'Unpaid'");
+        if (DB::getDriverName() === 'sqlite') {
+            Schema::table('bookings', function (Blueprint $table) {
+                $table->string('payment_status')->default('Unpaid')->change();
+            });
+        } else {
+            DB::statement("ALTER TABLE bookings MODIFY COLUMN payment_status ENUM('Unpaid', 'Paid', 'Refunded') DEFAULT 'Unpaid'");
+        }
     }
 };

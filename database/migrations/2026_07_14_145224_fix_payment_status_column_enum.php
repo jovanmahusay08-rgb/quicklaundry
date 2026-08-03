@@ -12,8 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Change payment status from enum to varchar to support flexible status values
-        DB::statement("ALTER TABLE payments MODIFY COLUMN status VARCHAR(255) DEFAULT 'Pending'");
+        if (DB::getDriverName() === 'sqlite') {
+            Schema::table('payments', function (Blueprint $table) {
+                $table->string('status')->default('Pending')->change();
+            });
+        } else {
+            // Change payment status from enum to varchar to support flexible status values
+            DB::statement("ALTER TABLE payments MODIFY COLUMN status VARCHAR(255) DEFAULT 'Pending'");
+        }
     }
 
     /**
@@ -21,6 +27,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement("ALTER TABLE payments MODIFY COLUMN status ENUM('Pending', 'Paid', 'Failed') DEFAULT 'Pending'");
+        if (DB::getDriverName() === 'sqlite') {
+            Schema::table('payments', function (Blueprint $table) {
+                $table->string('status')->default('Pending')->change();
+            });
+        } else {
+            DB::statement("ALTER TABLE payments MODIFY COLUMN status ENUM('Pending', 'Paid', 'Failed') DEFAULT 'Pending'");
+        }
     }
 };

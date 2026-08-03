@@ -12,7 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement('ALTER TABLE notifications MODIFY user_id BIGINT UNSIGNED NULL');
+        if (DB::getDriverName() === 'sqlite') {
+            Schema::table('notifications', function (Blueprint $table) {
+                $table->unsignedBigInteger('user_id')->nullable()->change();
+            });
+        } else {
+            DB::statement('ALTER TABLE notifications MODIFY user_id BIGINT UNSIGNED NULL');
+        }
     }
 
     /**
@@ -20,6 +26,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement('ALTER TABLE notifications MODIFY user_id BIGINT UNSIGNED NOT NULL');
+        if (DB::getDriverName() === 'sqlite') {
+            Schema::table('notifications', function (Blueprint $table) {
+                $table->unsignedBigInteger('user_id')->nullable(false)->change();
+            });
+        } else {
+            DB::statement('ALTER TABLE notifications MODIFY user_id BIGINT UNSIGNED NOT NULL');
+        }
     }
 };

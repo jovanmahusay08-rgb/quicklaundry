@@ -22,7 +22,7 @@ class StaffPortalTest extends TestCase
             'email' => 'ana@example.com',
             'password' => Hash::make('secret123'),
             'phone' => '09171234567',
-            'role' => 'Processor',
+            'role' => 'Driver',
             'address' => '123 Sample Street',
             'barangay' => 'Poblacion',
             'is_active' => true,
@@ -63,6 +63,7 @@ class StaffPortalTest extends TestCase
             'delivery_barangay' => 'Poblacion',
             'delivery_phone' => '09171234567',
             'assigned_staff_id' => $staff->id,
+            'assigned_driver_id' => $staff->id,
         ]);
 
         $this->actingAs($staff, 'staff');
