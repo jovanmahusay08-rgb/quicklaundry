@@ -2,7 +2,7 @@
 /android-customer/.gradle
 /android-customer/local.properties
 /android-customer/**/build
-/storage/app/releases/*.apk
+!/storage/app/releases/quickwash-customer.apk
 /node_modules
 /public/hot
 /public/storage

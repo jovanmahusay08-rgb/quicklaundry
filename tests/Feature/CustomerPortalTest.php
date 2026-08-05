@@ -67,7 +67,10 @@ class CustomerPortalTest extends TestCase
     public function test_android_app_download_is_available_from_landing_page(): void
     {
         $this->get('/')->assertOk()->assertSee('Download App');
-        $this->get('/app/download')->assertNotFound();
+        $this->get('/app/download')
+            ->assertOk()
+            ->assertHeader('content-type', 'application/vnd.android.package-archive')
+            ->assertDownload('QuickWash-Customer.apk');
     }
 
     public function test_customer_can_resume_an_interrupted_gcash_payment(): void
