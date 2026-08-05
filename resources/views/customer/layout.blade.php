@@ -93,11 +93,9 @@
                         <h2 class="text-xl font-semibold text-slate-800">{{ $pageTitle ?? 'QuickWash' }}</h2>
                     </div>
                     <div class="flex items-center gap-4">
-                        @php
-                            $customer = auth('customer')->user();
-                            $notifications = $customer ? \App\Models\AppNotification::where('user_type', 'Customer')->where('user_id', $customer->id)->latest('created_at')->limit(5)->get() : collect();
-                            $unreadCount = $customer ? \App\Models\AppNotification::where('user_type', 'Customer')->where('user_id', $customer->id)->where('is_read', false)->count() : 0;
-                        @endphp
+                        @php($customer = auth('customer')->user())
+                        @php($notifications = $customer ? \App\Models\AppNotification::where('user_type', 'Customer')->where('user_id', $customer->id)->latest('created_at')->limit(5)->get() : collect())
+                        @php($unreadCount = $customer ? \App\Models\AppNotification::where('user_type', 'Customer')->where('user_id', $customer->id)->where('is_read', false)->count() : 0)
 
                         <div class="relative" x-data="{}">
                             <button id="notif-toggle" type="button" onclick="document.getElementById('notif-menu').classList.toggle('hidden')" class="relative inline-flex items-center rounded-md p-2 hover:bg-slate-100" aria-label="Notifications" aria-controls="notif-menu">
