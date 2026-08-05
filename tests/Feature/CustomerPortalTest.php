@@ -64,6 +64,12 @@ class CustomerPortalTest extends TestCase
         $this->get('/customer/profile')->assertOk()->assertSee('My Profile');
     }
 
+    public function test_android_app_download_is_available_from_landing_page(): void
+    {
+        $this->get('/')->assertOk()->assertSee('Download App');
+        $this->get('/app/download')->assertNotFound();
+    }
+
     public function test_customer_can_resume_an_interrupted_gcash_payment(): void
     {
         $customer = Customer::create([

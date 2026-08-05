@@ -128,6 +128,14 @@
                             </svg>
                             Track My Order
                         </a>
+                        <a href="{{ route('app.download') }}" class="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border-2 border-emerald-500 bg-emerald-600 px-7 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition hover:-translate-y-0.5 hover:bg-emerald-700" download>
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M12 3v12"></path>
+                                <path d="m7 10 5 5 5-5"></path>
+                                <path d="M5 21h14"></path>
+                            </svg>
+                            Download App
+                        </a>
                     </div>
 
                     <div class="mt-9 grid grid-cols-2 gap-x-5 gap-y-4 text-[.74rem] font-semibold leading-5 text-[#17366e] sm:grid-cols-4">

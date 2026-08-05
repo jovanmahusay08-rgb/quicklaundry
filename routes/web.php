@@ -18,6 +18,16 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::get('/app/download', function () {
+    $apkPath = storage_path('app/releases/quickwash-customer.apk');
+
+    abort_unless(is_file($apkPath), 404, 'The Android app is not available for download yet.');
+
+    return response()->download($apkPath, 'QuickWash-Customer.apk', [
+        'Content-Type' => 'application/vnd.android.package-archive',
+    ]);
+})->name('app.download');
+
 /*
 |--------------------------------------------------------------------------
 | Admin portal (guard: admin)

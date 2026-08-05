@@ -1,4 +1,8 @@
 /vendor
+/android-customer/.gradle
+/android-customer/local.properties
+/android-customer/**/build
+/storage/app/releases/*.apk
 /node_modules
 /public/hot
 /public/storage
