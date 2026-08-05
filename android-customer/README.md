@@ -5,7 +5,7 @@ This Kotlin Android app presents the existing customer portal as an installable 
 ## Configure and build
 
 1. Open this `android-customer` directory in Android Studio (JDK 17).
-2. In `app/build.gradle.kts`, replace `https://your-domain.example/customer/login` with the public HTTPS URL of the Laravel customer login.
+2. The customer portal URL is configured as `https://quickwashsystem.com/customer/login` in `app/build.gradle.kts`.
 3. Select **Build > Generate Signed Bundle / APK > APK** and create a signed release APK.
 4. Rename the output to `quickwash-customer.apk`.
 5. Copy it to `storage/app/releases/quickwash-customer.apk` in the Laravel project.
