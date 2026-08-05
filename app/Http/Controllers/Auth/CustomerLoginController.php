@@ -29,9 +29,17 @@ class CustomerLoginController extends Controller
             $request->session()->regenerate();
 
             $customer = Auth::guard('customer')->user();
-            $customer->forceFill(['last_login' => now()])->save();
+            try {
+                $customer->forceFill(['last_login' => now()])->save();
+            } catch (\Throwable $exception) {
+                report($exception);
+            }
 
-            ActivityLog::record('Customer', $customer->id, 'Customer Login', null, null, 'Successful login');
+            try {
+                ActivityLog::record('Customer', $customer->id, 'Customer Login', null, null, 'Successful login');
+            } catch (\Throwable $exception) {
+                report($exception);
+            }
 
             return redirect()->intended(route('customer.dashboard'));
         }
