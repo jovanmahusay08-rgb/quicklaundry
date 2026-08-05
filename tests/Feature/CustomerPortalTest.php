@@ -73,6 +73,46 @@ class CustomerPortalTest extends TestCase
             ->assertDownload('QuickWash-Customer.apk');
     }
 
+    public function test_customer_can_share_location_only_for_their_active_booking(): void
+    {
+        $customer = Customer::create([
+            'first_name' => 'Maria', 'last_name' => 'Santos', 'email' => 'location@example.com',
+            'password' => Hash::make('secret123'), 'phone' => '09171234567',
+            'address' => '123 Sample Street', 'barangay' => 'Poblacion',
+        ]);
+        $otherCustomer = Customer::create([
+            'first_name' => 'Ana', 'last_name' => 'Reyes', 'email' => 'other@example.com',
+            'password' => Hash::make('secret123'), 'phone' => '09179876543',
+            'address' => '456 Sample Street', 'barangay' => 'Poblacion',
+        ]);
+        $service = LaundryService::create([
+            'service_name' => 'Wash & Fold', 'base_price' => 120, 'price_per_kilo' => 30,
+            'estimated_days' => 2, 'is_active' => true,
+        ]);
+        $bookingData = [
+            'booking_reference' => 'BK-LOCATION-1', 'service_id' => $service->id,
+            'quantity_kg' => 3, 'service_type' => 'Wash & Fold', 'service_price' => 120,
+            'subtotal' => 120, 'discount' => 0, 'total_amount' => 120, 'status' => 'Pending',
+            'payment_status' => 'Unpaid', 'delivery_address' => '123 Sample Street',
+            'delivery_barangay' => 'Poblacion', 'delivery_phone' => '09171234567',
+        ];
+        $booking = Booking::create(['customer_id' => $customer->id] + $bookingData);
+        $otherBooking = Booking::create(['customer_id' => $otherCustomer->id] + array_merge($bookingData, ['booking_reference' => 'BK-LOCATION-2']));
+
+        $this->actingAs($customer, 'customer');
+
+        $this->postJson("/customer/bookings/{$booking->id}/location", [
+            'latitude' => 11.1547001, 'longitude' => 123.8056001, 'accuracy' => 8.5,
+        ])->assertOk()->assertJsonPath('accuracy', 8.5);
+
+        $this->assertDatabaseHas('bookings', [
+            'id' => $booking->id, 'live_latitude' => 11.1547001, 'live_longitude' => 123.8056001,
+        ]);
+        $this->postJson("/customer/bookings/{$otherBooking->id}/location", [
+            'latitude' => 11.1547, 'longitude' => 123.8056,
+        ])->assertForbidden();
+    }
+
     public function test_customer_can_resume_an_interrupted_gcash_payment(): void
     {
         $customer = Customer::create([

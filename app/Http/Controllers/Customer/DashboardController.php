@@ -140,6 +140,37 @@ class DashboardController extends Controller
         return view('customer.tracking', compact('customer', 'bookings'));
     }
 
+    public function updateLocation(Request $request, Booking $booking)
+    {
+        $customer = $this->customer();
+
+        abort_unless($booking->customer_id === $customer->id, 403);
+
+        if (in_array($booking->status, ['Completed', 'Cancelled'], true)) {
+            return response()->json(['message' => 'Location tracking has ended for this booking.'], 422);
+        }
+
+        $location = $request->validate([
+            'latitude' => ['required', 'numeric', 'between:-90,90'],
+            'longitude' => ['required', 'numeric', 'between:-180,180'],
+            'accuracy' => ['nullable', 'numeric', 'min:0', 'max:10000'],
+        ]);
+
+        $booking->forceFill([
+            'live_latitude' => round((float) $location['latitude'], 7),
+            'live_longitude' => round((float) $location['longitude'], 7),
+            'location_accuracy' => isset($location['accuracy']) ? round((float) $location['accuracy'], 2) : null,
+            'location_updated_at' => now(),
+        ])->save();
+
+        return response()->json([
+            'latitude' => (float) $booking->live_latitude,
+            'longitude' => (float) $booking->live_longitude,
+            'accuracy' => $booking->location_accuracy !== null ? (float) $booking->location_accuracy : null,
+            'updated_at' => $booking->location_updated_at->toIso8601String(),
+        ]);
+    }
+
     public function loyalty()
     {
         $customer = $this->customer();

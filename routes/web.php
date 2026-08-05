@@ -123,6 +123,7 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('/bookings/create', [CustomerDashboardController::class, 'createBooking'])->name('bookings.create');
         Route::post('/bookings', [CustomerDashboardController::class, 'storeBooking'])->name('bookings.store');
         Route::get('/bookings/{booking}', [CustomerDashboardController::class, 'showBooking'])->name('bookings.show');
+        Route::post('/bookings/{booking}/location', [CustomerDashboardController::class, 'updateLocation'])->name('bookings.location.update');
         Route::get('/bookings/{booking}/payment/resume', [CustomerDashboardController::class, 'resumePayment'])->name('bookings.payment.resume');
         Route::post('/bookings/{booking}/pay', [CustomerDashboardController::class, 'processPayment'])->name('bookings.pay');
         Route::get('/bookings/{booking}/receipt', [CustomerDashboardController::class, 'downloadReceipt'])->name('bookings.receipt');

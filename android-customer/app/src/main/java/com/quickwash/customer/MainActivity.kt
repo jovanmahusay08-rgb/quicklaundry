@@ -1,13 +1,16 @@
 package com.quickwash.customer
 
+import android.Manifest
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.webkit.CookieManager
 import android.webkit.DownloadListener
+import android.webkit.GeolocationPermissions
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.URLUtil
@@ -37,10 +40,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var refreshLayout: SwipeRefreshLayout
     private lateinit var navigationItems: List<NavigationItem>
     private var fileSelectionCallback: ValueCallback<Array<Uri>>? = null
+    private var geolocationCallback: GeolocationPermissions.Callback? = null
+    private var geolocationOrigin: String? = null
     private val filePicker = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         val selectedFiles = WebChromeClient.FileChooserParams.parseResult(result.resultCode, result.data)
         fileSelectionCallback?.onReceiveValue(selectedFiles)
         fileSelectionCallback = null
+    }
+    private val locationPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+        val granted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
+            permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+        geolocationCallback?.invoke(geolocationOrigin, granted, false)
+        geolocationCallback = null
+        geolocationOrigin = null
+        if (!granted) Toast.makeText(this, "Location permission is needed for live order tracking", Toast.LENGTH_LONG).show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +77,7 @@ class MainActivity : AppCompatActivity() {
             domStorageEnabled = true
             allowFileAccess = false
             allowContentAccess = true
+            setGeolocationEnabled(true)
             mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
             setSupportZoom(false)
             builtInZoomControls = false
@@ -97,6 +111,31 @@ class MainActivity : AppCompatActivity() {
             }
         }
         webView.webChromeClient = object : WebChromeClient() {
+            override fun onGeolocationPermissionsShowPrompt(origin: String, callback: GeolocationPermissions.Callback) {
+                val host = Uri.parse(origin).host.orEmpty()
+                val trustedOrigin = host.equals("quickwashsystem.com", ignoreCase = true) ||
+                    host.endsWith(".quickwashsystem.com", ignoreCase = true)
+                if (!trustedOrigin) {
+                    callback.invoke(origin, false, false)
+                    return
+                }
+
+                val hasPermission = ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                if (hasPermission) {
+                    callback.invoke(origin, true, false)
+                    return
+                }
+
+                geolocationCallback?.invoke(geolocationOrigin, false, false)
+                geolocationOrigin = origin
+                geolocationCallback = callback
+                locationPermissionLauncher.launch(arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ))
+            }
+
             override fun onShowFileChooser(
                 webView: WebView,
                 filePathCallback: ValueCallback<Array<Uri>>,

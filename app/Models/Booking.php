@@ -16,6 +16,7 @@ class Booking extends Model
         'is_rush_service', 'rush_fee', 'priority_level', 'subtotal', 'discount', 'total_amount',
         'status', 'payment_status', 'payment_method', 'delivery_address', 'delivery_municipality',
         'delivery_barangay', 'delivery_purok', 'location_latitude', 'location_longitude',
+        'live_latitude', 'live_longitude', 'location_accuracy', 'location_updated_at',
         'delivery_phone', 'recipient_name', 'special_instructions', 'estimated_completion',
         'assigned_staff_id', 'assigned_driver_id', 'notes', 'completed_at',
     ];
@@ -28,6 +29,10 @@ class Booking extends Model
         'completed_at' => 'datetime',
         'location_latitude' => 'decimal:7',
         'location_longitude' => 'decimal:7',
+        'live_latitude' => 'decimal:7',
+        'live_longitude' => 'decimal:7',
+        'location_accuracy' => 'decimal:2',
+        'location_updated_at' => 'datetime',
     ];
 
     protected static function booted()
