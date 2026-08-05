@@ -1,5 +1,9 @@
 <resources>
     <color name="brand_blue">#0284C7</color>
     <color name="brand_blue_dark">#0C4A6E</color>
+    <color name="brand_blue_soft">#E0F2FE</color>
+    <color name="nav_inactive">#64748B</color>
+    <color name="surface">#F8FAFC</color>
+    <color name="divider">#E2E8F0</color>
     <color name="white">#FFFFFF</color>
 </resources>

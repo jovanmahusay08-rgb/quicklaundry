@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    @php($isAndroidApp = str_contains(request()->userAgent() ?? '', 'QuickWashCustomer/'))
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $pageTitle ?? 'QuickWash' }} - QuickWash Express</title>
@@ -19,10 +20,20 @@
         }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        html, body { max-width: 100%; overflow-x: hidden; }
+        input, select, textarea, button { max-width: 100%; }
+        .customer-content { min-width: 0; }
+        .customer-content img, .customer-content svg { max-width: 100%; }
+        @media (max-width: 639px) {
+            .customer-content .mobile-stack { align-items: stretch; flex-direction: column; }
+            .customer-content table { font-size: .75rem; }
+        }
+    </style>
 </head>
-<body class="min-h-screen bg-slate-100 text-slate-800 lg:h-screen lg:overflow-hidden">
+<body class="min-h-screen bg-slate-100 text-slate-800 {{ $isAndroidApp ? '' : 'pb-20 lg:pb-0' }} lg:h-screen lg:overflow-hidden">
 <div class="min-h-screen lg:flex lg:h-screen">
-    <aside class="w-full lg:h-screen lg:w-72 lg:shrink-0 bg-slate-950 text-white p-6 flex flex-col">
+    <aside class="hidden lg:flex lg:h-screen lg:w-72 lg:shrink-0 bg-slate-950 text-white p-6 flex-col">
         <div class="mb-10">
             <a href="{{ route('customer.dashboard') }}" class="flex items-center gap-3 mb-2">
                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/20 text-brand-400">
@@ -74,8 +85,8 @@
     </aside>
 
     <div class="min-w-0 flex-1 lg:h-screen lg:overflow-y-auto">
-        <header class="border-b border-slate-200 bg-white/80 backdrop-blur">
-            <div class="px-6 py-4">
+        <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur lg:static lg:bg-white/80 lg:shadow-none">
+            <div class="px-4 py-3 sm:px-6 sm:py-4">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm text-slate-500">{{ $pageTitle ?? 'QuickWash' }}</p>
@@ -96,7 +107,7 @@
                                 @endif
                             </button>
 
-                            <div id="notif-menu" class="hidden absolute right-0 mt-2 w-80 bg-white border border-slate-200 rounded-lg shadow-lg z-50">
+                            <div id="notif-menu" class="hidden absolute right-0 mt-2 w-[calc(100vw-2rem)] max-w-80 bg-white border border-slate-200 rounded-xl shadow-xl z-50">
                                 <div class="p-3">
                                     <div class="flex items-center justify-between mb-2">
                                         <h3 class="text-sm font-semibold">Notifications</h3>
@@ -135,10 +146,27 @@
             </div>
         </header>
 
-        <main class="p-6">
+        <main class="customer-content min-w-0 p-4 sm:p-6">
             @yield('content')
         </main>
     </div>
 </div>
+@unless($isAndroidApp)
+    <nav class="fixed inset-x-0 bottom-0 z-50 grid h-20 grid-cols-5 border-t border-slate-200 bg-white/95 px-2 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_rgba(15,23,42,0.08)] backdrop-blur lg:hidden" aria-label="Customer navigation">
+        @foreach([
+            ['customer.dashboard', 'fas fa-house', 'Home'],
+            ['customer.bookings', 'fas fa-calendar-check', 'Bookings'],
+            ['customer.tracking', 'fas fa-location-dot', 'Tracking'],
+            ['customer.loyalty', 'fas fa-gift', 'Rewards'],
+            ['customer.profile', 'fas fa-user', 'Profile'],
+        ] as [$route, $icon, $label])
+            @php($active = request()->routeIs($route . '*'))
+            <a href="{{ route($route) }}" class="flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 text-[10px] font-bold {{ $active ? 'text-brand-600' : 'text-slate-500' }}" @if($active) aria-current="page" @endif>
+                <span class="flex h-8 w-11 items-center justify-center rounded-xl {{ $active ? 'bg-brand-50' : '' }}"><i class="{{ $icon }} text-lg"></i></span>
+                <span class="truncate">{{ $label }}</span>
+            </a>
+        @endforeach
+    </nav>
+@endunless
 </body>
 </html>

@@ -5,8 +5,8 @@
 <div class="space-y-6">
     {{-- Header removed: navigation moved to sidebar --}}
 
-    <main class="max-w-7xl mx-auto px-6 py-8 space-y-6">
-        <section class="rounded-2xl bg-gradient-to-r from-brand-600 to-sky-500 p-6 text-white shadow-sm">
+    <main class="mx-auto max-w-7xl space-y-5 py-1 sm:space-y-6 sm:px-6 sm:py-8">
+        <section class="rounded-2xl bg-gradient-to-br from-brand-700 via-brand-600 to-sky-500 p-5 text-white shadow-lg shadow-sky-900/10 sm:p-6">
             <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
                     <p class="text-sm text-brand-50">Welcome back</p>
@@ -18,15 +18,15 @@
         </section>
 
         <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            <div class="min-w-0 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                 <p class="text-sm font-medium text-slate-500">Active Orders</p>
                 <p class="mt-3 text-3xl font-bold text-brand-600">{{ $activeBookings }}</p>
             </div>
-            <div class="min-w-0 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                 <p class="text-sm font-medium text-slate-500">Total Spent</p>
                 <p class="mt-3 truncate text-3xl font-bold text-slate-800">₱{{ number_format($totalSpent ?? 0, 2) }}</p>
             </div>
-            <div class="min-w-0 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                 <p class="text-sm font-medium text-slate-500">Loyalty Points</p>
                 <p class="mt-3 text-3xl font-bold text-emerald-600">{{ $loyalty->available_points ?? 0 }}</p>
             </div>
@@ -44,19 +44,19 @@
                     <thead class="bg-slate-50 text-slate-500 text-left">
                         <tr>
                             <th class="px-5 py-2 font-medium">Reference</th>
-                            <th class="px-5 py-2 font-medium">Service</th>
+                            <th class="hidden px-5 py-2 font-medium sm:table-cell">Service</th>
                             <th class="px-5 py-2 font-medium">Status</th>
-                            <th class="px-5 py-2 font-medium text-right">Total</th>
+                            <th class="hidden px-5 py-2 font-medium text-right md:table-cell">Total</th>
                             <th class="px-5 py-2 font-medium text-right">Payment</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
                         @forelse ($bookings as $booking)
                             <tr>
-                                <td class="px-5 py-3 font-mono text-xs"><a class="text-brand-600 hover:underline" href="{{ route('customer.bookings.show', $booking) }}">{{ $booking->booking_reference }}</a></td>
-                                <td class="px-5 py-3">{{ $booking->service->service_name ?? '—' }}</td>
-                                <td class="px-5 py-3"><span class="inline-flex px-2 py-0.5 rounded-full text-xs bg-slate-100 text-slate-700">{{ $booking->status }}</span></td>
-                                <td class="px-5 py-3 text-right">₱{{ number_format($booking->total_amount, 2) }}</td>
+                                <td class="px-3 py-3 font-mono text-[11px] sm:px-5 sm:text-xs"><a class="text-brand-600 hover:underline" href="{{ route('customer.bookings.show', $booking) }}">{{ $booking->booking_reference }}</a></td>
+                                <td class="hidden px-5 py-3 sm:table-cell">{{ $booking->service->service_name ?? '—' }}</td>
+                                <td class="px-3 py-3 sm:px-5"><span class="inline-flex px-2 py-0.5 rounded-full text-xs bg-slate-100 text-slate-700">{{ $booking->status }}</span></td>
+                                <td class="hidden px-5 py-3 text-right md:table-cell">₱{{ number_format($booking->total_amount, 2) }}</td>
                                 <td class="px-5 py-3 text-right">
                                     @if($booking->payment_status !== 'Paid')
                                         <a href="{{ route('customer.bookings.payment.resume', $booking) }}" class="text-xs font-medium text-brand-600 hover:underline">Complete payment</a>

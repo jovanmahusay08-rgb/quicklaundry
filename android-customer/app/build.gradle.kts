@@ -10,9 +10,10 @@ android {
         applicationId = "com.quickwash.customer"
         minSdk = 24
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = 3
+        versionName = "1.1.0"
 
+        buildConfigField("String", "PORTAL_ROOT", "\"https://quickwashsystem.com\"")
         buildConfigField("String", "PORTAL_URL", "\"https://quickwashsystem.com/customer/login\"")
     }
 
