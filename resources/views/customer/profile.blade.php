@@ -4,14 +4,14 @@
 @php($pageTitle = 'Profile')
 <div class="py-2">
     <div class="max-w-3xl mx-auto">
-        <div class="mb-6 flex items-center justify-between">
+        <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
             <div>
                 <h1 class="text-2xl font-bold text-slate-800">My Profile</h1>
             </div>
             <x-back-button :href="route('customer.dashboard')">Back</x-back-button>
         </div>
 
-        <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-8">
             @if (session('success'))
                 <div class="mb-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 text-sm">
                     {{ session('success') }}
@@ -47,8 +47,18 @@
                     <label class="block text-sm font-medium text-slate-700 mb-1">Barangay</label>
                     <input type="text" name="barangay" value="{{ old('barangay', $customer->barangay) }}" class="w-full rounded-lg border-slate-300" required>
                 </div>
-                <button type="submit" class="inline-flex rounded-lg bg-brand-600 px-4 py-2 text-white hover:bg-brand-700">Save Changes</button>
+                <button type="submit" class="inline-flex w-full justify-center rounded-lg bg-brand-600 px-4 py-2 text-white hover:bg-brand-700 sm:w-auto">Save Changes</button>
             </form>
+
+            <div class="mt-8 border-t border-slate-200 pt-6 lg:hidden">
+                <form method="POST" action="{{ route('customer.logout') }}">
+                    @csrf
+                    <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-red-200 bg-red-50 px-4 py-3 font-semibold text-red-600 hover:bg-red-100">
+                        <i class="fas fa-right-from-bracket" aria-hidden="true"></i>
+                        Log out
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

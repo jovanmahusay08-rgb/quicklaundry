@@ -22,19 +22,22 @@
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
-        html, body { max-width: 100%; overflow-x: hidden; }
+        html, body { width: 100%; min-height: 100%; overflow-x: clip; overflow-y: auto; }
+        *, *::before, *::after { box-sizing: border-box; }
         input, select, textarea, button { max-width: 100%; }
-        .customer-content { min-width: 0; }
-        .customer-content img, .customer-content svg { max-width: 100%; }
+        .customer-content, .customer-content > *, .customer-content section, .customer-content article { min-width: 0; }
+        .customer-content img, .customer-content svg, .customer-content video { max-width: 100%; height: auto; }
+        .customer-content table { max-width: 100%; }
+        .customer-content td, .customer-content th { overflow-wrap: anywhere; }
         @media (max-width: 639px) {
             .customer-content .mobile-stack { align-items: stretch; flex-direction: column; }
             .customer-content table { font-size: .75rem; }
         }
     </style>
 </head>
-<body class="min-h-screen bg-slate-100 text-slate-800 {{ $isAndroidApp ? '' : 'pb-20 lg:pb-0' }} lg:h-screen lg:overflow-hidden">
-<div class="min-h-screen lg:flex lg:h-screen">
-    <aside class="hidden lg:flex lg:h-screen lg:w-72 lg:shrink-0 bg-slate-950 text-white p-6 flex-col">
+<body class="min-h-screen overflow-y-auto bg-slate-100 text-slate-800 {{ $isAndroidApp ? '' : 'pb-20 lg:pb-0' }}">
+<div class="min-h-screen lg:flex lg:items-start">
+    <aside class="hidden lg:sticky lg:top-0 lg:flex lg:h-screen lg:w-72 lg:shrink-0 bg-slate-950 text-white p-6 flex-col">
         <div class="mb-10">
             <a href="{{ route('customer.dashboard') }}" class="flex items-center gap-3 mb-2">
                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/20 text-brand-400">
@@ -85,15 +88,15 @@
         </div>
     </aside>
 
-    <div class="min-w-0 flex-1 lg:h-screen lg:overflow-y-auto">
+    <div class="min-w-0 flex-1">
         <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur lg:static lg:bg-white/80 lg:shadow-none">
             <div class="px-4 py-3 sm:px-6 sm:py-4">
                 <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-slate-500">{{ $pageTitle ?? 'QuickWash' }}</p>
-                        <h2 class="text-xl font-semibold text-slate-800">{{ $pageTitle ?? 'QuickWash' }}</h2>
+                    <div class="min-w-0 pr-2">
+                        <p class="truncate text-sm text-slate-500">{{ $pageTitle ?? 'QuickWash' }}</p>
+                        <h2 class="truncate text-xl font-semibold text-slate-800">{{ $pageTitle ?? 'QuickWash' }}</h2>
                     </div>
-                    <div class="flex items-center gap-4">
+                    <div class="flex shrink-0 items-center gap-2 sm:gap-4">
                         @php($customer = auth('customer')->user())
                         @php($notifications = $customer ? \App\Models\AppNotification::where('user_type', 'Customer')->where('user_id', $customer->id)->latest('created_at')->limit(5)->get() : collect())
                         @php($unreadCount = $customer ? \App\Models\AppNotification::where('user_type', 'Customer')->where('user_id', $customer->id)->where('is_read', false)->count() : 0)
@@ -139,6 +142,16 @@
                                 </div>
                             </div>
                         </div>
+
+                        @if($isAndroidApp)
+                            <form method="POST" action="{{ route('customer.logout') }}">
+                                @csrf
+                                <button type="submit" class="inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-600" aria-label="Log out">
+                                    <i class="fas fa-right-from-bracket" aria-hidden="true"></i>
+                                    <span class="hidden sm:inline">Log out</span>
+                                </button>
+                            </form>
+                        @endif
 
                     </div>
                 </div>

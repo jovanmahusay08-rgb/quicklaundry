@@ -73,6 +73,28 @@ class CustomerPortalTest extends TestCase
             ->assertDownload('QuickWash-Customer.apk');
     }
 
+    public function test_android_customer_dashboard_has_a_working_logout_button(): void
+    {
+        $customer = Customer::create([
+            'first_name' => 'Maria', 'last_name' => 'Santos', 'email' => 'logout@example.com',
+            'password' => Hash::make('secret123'), 'phone' => '09171234567',
+            'address' => '123 Sample Street', 'barangay' => 'Poblacion',
+        ]);
+
+        $this->actingAs($customer, 'customer')
+            ->withHeader('User-Agent', 'QuickWashCustomer/1.0')
+            ->get(route('customer.dashboard'))
+            ->assertOk()
+            ->assertSee('aria-label="Log out"', false)
+            ->assertSee(route('customer.logout'), false);
+
+        $this->actingAs($customer, 'customer')
+            ->post(route('customer.logout'))
+            ->assertRedirect(route('customer.login'));
+
+        $this->assertGuest('customer');
+    }
+
     public function test_customer_can_share_location_only_for_their_active_booking(): void
     {
         $customer = Customer::create([
