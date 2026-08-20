@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Mail\PasswordResetCodeMail;
 use App\Models\Admin;
 use App\Models\Customer;
-use App\Models\PasswordResetCode;
 use App\Models\Staff;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
@@ -36,16 +36,15 @@ class PasswordResetCodeController extends Controller
         $email = strtolower($data['email']);
         $account = $model::whereRaw('LOWER(email) = ?', [$email])->first();
 
-        PasswordResetCode::where('portal', $portal)->where('email', $email)->delete();
+        Cache::forget($this->cacheKey($portal, $email));
 
         if ($account) {
             $code = (string) random_int(100000, 999999);
-            PasswordResetCode::create([
-                'portal' => $portal,
-                'email' => $email,
+            Cache::put($this->cacheKey($portal, $email), [
                 'code_hash' => Hash::make($code),
-                'expires_at' => now()->addMinutes(10),
-            ]);
+                'attempts' => 0,
+                'expires_at' => now()->addMinutes(10)->timestamp,
+            ], now()->addMinutes(10));
             Mail::to($account->email)->send(new PasswordResetCodeMail($code, $portal));
         }
 
@@ -80,20 +79,23 @@ class PasswordResetCodeController extends Controller
 
         $data = $request->validate(['code' => ['required', 'digits:6']]);
         $email = $request->session()->get('password_reset.email');
-        $record = PasswordResetCode::where('portal', $portal)
-            ->where('email', $email)
-            ->latest()
-            ->first();
+        $cacheKey = $this->cacheKey($portal, $email);
+        $record = Cache::get($cacheKey);
 
-        if (!$record || $record->expires_at->isPast() || $record->attempts >= 5 || !Hash::check($data['code'], $record->code_hash)) {
+        if (!$record || $record['expires_at'] <= now()->timestamp || $record['attempts'] >= 5 || !Hash::check($data['code'], $record['code_hash'])) {
             if ($record) {
-                $record->increment('attempts');
+                $record['attempts']++;
+                if ($record['attempts'] >= 5) {
+                    Cache::forget($cacheKey);
+                } else {
+                    Cache::put($cacheKey, $record, max(1, $record['expires_at'] - now()->timestamp));
+                }
             }
 
             return back()->withErrors(['code' => 'The code is invalid or has expired. Request a new code and try again.']);
         }
 
-        $record->delete();
+        Cache::forget($cacheKey);
         $request->session()->put('password_reset.verified', true);
 
         return redirect()->route("{$portal}.password.reset");
@@ -145,5 +147,10 @@ class PasswordResetCodeController extends Controller
     {
         return $this->hasResetSession($request, $portal)
             && $request->session()->get('password_reset.verified') === true;
+    }
+
+    private function cacheKey(string $portal, string $email): string
+    {
+        return 'password_reset_code:' . $portal . ':' . hash('sha256', strtolower($email));
     }
 }

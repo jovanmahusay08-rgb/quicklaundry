@@ -9,7 +9,6 @@ use App\Models\AppNotification;
 use App\Models\Booking;
 use App\Models\Customer;
 use App\Models\LaundryService;
-use App\Models\PasswordResetCode;
 use App\Models\Payment;
 use App\Models\Staff;
 use Illuminate\Http\Request;
@@ -200,7 +199,6 @@ class AdminPortalController extends Controller
             Booking::where('assigned_driver_id', $staff->id)->update(['assigned_driver_id' => null]);
             DB::table('pickup_schedule')->where('assigned_driver_id', $staff->id)->update(['assigned_driver_id' => null]);
             DB::table('delivery_schedule')->where('assigned_driver_id', $staff->id)->update(['assigned_driver_id' => null]);
-            PasswordResetCode::where('portal', 'staff')->where('email', strtolower($staff->email))->delete();
             $staff->delete();
         });
 
