@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $pageTitle ?? 'Staff Portal' }} - QuickWash Express</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/quickwash-logo.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -26,9 +27,7 @@
     <aside class="flex w-full flex-col bg-slate-900 p-6 text-white lg:h-screen lg:w-72 lg:shrink-0">
         <div class="mb-8 border-b border-slate-800 pb-6">
             <a href="{{ route('staff.dashboard') }}" class="flex items-center gap-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/20 text-brand-400">
-                    <i class="fas fa-tshirt"></i>
-                </div>
+                <img src="{{ asset('images/quickwash-logo.png') }}" alt="QuickWash logo" class="h-12 w-12 rounded-full object-contain">
                 <div>
                     <p class="font-semibold">QuickWash</p>
                     <p class="text-xs text-slate-400">Staff Portal</p>

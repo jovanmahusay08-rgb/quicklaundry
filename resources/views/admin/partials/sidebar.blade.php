@@ -1,9 +1,7 @@
 <aside class="flex h-screen w-72 shrink-0 flex-col bg-slate-900 text-slate-100">
     <div class="px-6 py-6 border-b border-slate-800">
         <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center">
-                <i class="fas fa-tshirt"></i>
-            </div>
+            <img src="{{ asset('images/quickwash-logo.png') }}" alt="QuickWash logo" class="h-12 w-12 rounded-full object-contain">
             <div>
                 <p class="font-semibold">QuickWash</p>
                 <p class="text-xs text-slate-400">Admin Center</p>

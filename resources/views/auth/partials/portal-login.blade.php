@@ -40,15 +40,7 @@
 
     <div class="relative z-10 mx-auto max-w-5xl">
         <a href="{{ route('home') }}" class="mx-auto flex w-fit items-center gap-4" aria-label="Back to QuickWash Express home">
-            <span class="relative flex h-16 w-16 items-center justify-center rounded-full border-[6px] border-[#1265e8] text-[#1265e8]">
-                <span class="absolute -left-5 top-1 h-1.5 w-5 rounded-full bg-[#46a6ff]"></span>
-                <span class="absolute -left-7 top-5 h-1.5 w-7 rounded-full bg-[#1265e8]"></span>
-                <span class="absolute -left-4 bottom-1 h-1.5 w-4 rounded-full bg-[#46a6ff]"></span>
-                <svg class="h-9 w-9" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M4 13c2-3 4-4 7-2 3 2 5 1 9-2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4Z" fill="currentColor" opacity=".9"/>
-                    <path d="M6.5 7.5h.01M17.5 6.5h.01" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-                </svg>
-            </span>
+            <img src="{{ asset('images/quickwash-logo.png') }}" alt="QuickWash logo" class="h-20 w-20 rounded-full object-contain sm:h-24 sm:w-24">
             <span>
                 <span class="block text-3xl font-black leading-none tracking-tight text-[#0a2d75] sm:text-4xl">QuickWash</span>
                 <span class="mt-1.5 block text-center text-xs font-extrabold uppercase tracking-[.4em] text-[#1265e8] sm:text-sm">Express</span>
