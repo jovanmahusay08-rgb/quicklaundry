@@ -9,10 +9,13 @@ use App\Models\AppNotification;
 use App\Models\Booking;
 use App\Models\Customer;
 use App\Models\LaundryService;
+use App\Models\PasswordResetCode;
 use App\Models\Payment;
 use App\Models\Staff;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class AdminPortalController extends Controller
 {
@@ -142,6 +145,52 @@ class AdminPortalController extends Controller
 
         return redirect()->route('admin.staff')
             ->with('success', 'Staff account created successfully.');
+    }
+
+    public function editStaff(Staff $staff)
+    {
+        return view('admin.staff.edit', compact('staff'));
+    }
+
+    public function updateStaff(Request $request, Staff $staff)
+    {
+        $validated = $request->validate([
+            'first_name' => ['required', 'string', 'max:50'],
+            'last_name' => ['required', 'string', 'max:50'],
+            'email' => ['required', 'email', 'max:100', Rule::unique('staff', 'email')->ignore($staff->id)],
+            'phone' => ['required', 'digits:11'],
+            'role' => ['required', 'in:Driver,Processor,Quality Check'],
+            'address' => ['nullable', 'string'],
+            'barangay' => ['nullable', 'in:Balidbid,Bantigue,Langub,Maricaban,Okoy,Poblacion,Pooc,Talisay'],
+            'salary' => ['nullable', 'numeric', 'min:0'],
+            'hire_date' => ['nullable', 'date'],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $password = $validated['password'] ?? null;
+        unset($validated['password']);
+        if ($password) {
+            $validated['password'] = Hash::make($password);
+        }
+        $staff->update($validated);
+
+        return redirect()->route('admin.staff')
+            ->with('success', 'Staff account updated successfully.');
+    }
+
+    public function destroyStaff(Staff $staff)
+    {
+        DB::transaction(function () use ($staff) {
+            Booking::where('assigned_staff_id', $staff->id)->update(['assigned_staff_id' => null]);
+            Booking::where('assigned_driver_id', $staff->id)->update(['assigned_driver_id' => null]);
+            DB::table('pickup_schedule')->where('assigned_driver_id', $staff->id)->update(['assigned_driver_id' => null]);
+            DB::table('delivery_schedule')->where('assigned_driver_id', $staff->id)->update(['assigned_driver_id' => null]);
+            PasswordResetCode::where('portal', 'staff')->where('email', strtolower($staff->email))->delete();
+            $staff->delete();
+        });
+
+        return redirect()->route('admin.staff')
+            ->with('success', 'Staff account deleted successfully. Existing orders were left unassigned.');
     }
 
     public function services()

@@ -111,6 +111,7 @@
                         <th class="px-5 py-3 text-left">Phone</th>
                         <th class="px-5 py-3 text-left">Barangay</th>
                         <th class="px-5 py-3 text-left">Status</th>
+                        <th class="px-5 py-3 text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
@@ -126,9 +127,19 @@
                                     <button type="submit" class="rounded-full {{ $member->is_active ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }} px-2.5 py-1 text-xs font-medium transition cursor-pointer">{{ $member->is_active ? 'Active' : 'Inactive' }}</button>
                                 </form>
                             </td>
+                            <td class="px-5 py-3">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{{ route('admin.staff.edit', $member) }}" class="rounded-lg border border-blue-200 px-3 py-1.5 text-xs font-semibold text-blue-700 transition hover:bg-blue-50">Edit</a>
+                                    <form action="{{ route('admin.staff.destroy', $member) }}" method="POST" onsubmit="return confirm('Delete {{ addslashes($member->full_name) }}? Their assigned orders will become unassigned.')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="rounded-lg border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-700 transition hover:bg-red-50">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="px-5 py-6 text-center text-slate-400">No staff found.</td></tr>
+                        <tr><td colspan="6" class="px-5 py-6 text-center text-slate-400">No staff found.</td></tr>
                     @endforelse
                 </tbody>
             </table>
