@@ -123,6 +123,27 @@ class AdminPortalController extends Controller
         return view('admin.staff.index', compact('staff'));
     }
 
+    public function storeStaff(Request $request)
+    {
+        $validated = $request->validate([
+            'first_name' => ['required', 'string', 'max:50'],
+            'last_name' => ['required', 'string', 'max:50'],
+            'email' => ['required', 'email', 'max:100', 'unique:staff,email'],
+            'phone' => ['required', 'digits:11'],
+            'role' => ['required', 'in:Driver,Processor,Quality Check'],
+            'address' => ['nullable', 'string'],
+            'barangay' => ['nullable', 'in:Balidbid,Bantigue,Langub,Maricaban,Okoy,Poblacion,Pooc,Talisay'],
+            'salary' => ['nullable', 'numeric', 'min:0'],
+            'hire_date' => ['nullable', 'date'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        Staff::create($validated + ['is_active' => true]);
+
+        return redirect()->route('admin.staff')
+            ->with('success', 'Staff account created successfully.');
+    }
+
     public function services()
     {
         $services = LaundryService::latest()->paginate(15);

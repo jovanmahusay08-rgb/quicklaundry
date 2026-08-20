@@ -56,6 +56,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/customers', [AdminPortalController::class, 'customers'])->name('customers');
         Route::get('/customers/{customer}', [AdminPortalController::class, 'showCustomer'])->name('customers.show');
         Route::get('/staff', [AdminPortalController::class, 'staff'])->name('staff');
+        Route::post('/staff', [AdminPortalController::class, 'storeStaff'])->name('staff.store');
         Route::post('/staff/{staff}/toggle-active', [AdminPortalController::class, 'toggleStaffActive'])->name('staff.toggle-active');
         Route::get('/assign-staff', [AdminPortalController::class, 'assignStaff'])->name('assign-staff');
         Route::post('/assign-staff', [AdminPortalController::class, 'assignStaffStore'])->name('assign-staff.store');
