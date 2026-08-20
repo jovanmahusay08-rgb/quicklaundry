@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminPortalController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\Auth\CustomerLoginController;
+use App\Http\Controllers\Auth\PasswordResetCodeController;
 use App\Http\Controllers\Auth\StaffLoginController;
 use App\Http\Controllers\Customer\DashboardController as CustomerDashboardController;
 use App\Http\Controllers\Staff\DashboardController as StaffDashboardController;
@@ -37,6 +38,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('guest:admin')->group(function () {
         Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('login');
         Route::post('/login', [AdminLoginController::class, 'login']);
+        Route::get('/forgot-password', [PasswordResetCodeController::class, 'showRequestForm'])->defaults('portal', 'admin')->name('password.request');
+        Route::post('/forgot-password', [PasswordResetCodeController::class, 'sendCode'])->defaults('portal', 'admin')->middleware('throttle:5,1')->name('password.email');
+        Route::get('/verify-reset-code', [PasswordResetCodeController::class, 'showCodeForm'])->defaults('portal', 'admin')->name('password.code');
+        Route::post('/verify-reset-code', [PasswordResetCodeController::class, 'verifyCode'])->defaults('portal', 'admin')->middleware('throttle:10,1')->name('password.verify');
+        Route::get('/reset-password', [PasswordResetCodeController::class, 'showResetForm'])->defaults('portal', 'admin')->name('password.reset');
+        Route::post('/reset-password', [PasswordResetCodeController::class, 'resetPassword'])->defaults('portal', 'admin')->name('password.update');
     });
 
     Route::middleware('auth.admin')->group(function () {
@@ -82,6 +89,12 @@ Route::prefix('staff')->name('staff.')->group(function () {
     Route::middleware('guest:staff')->group(function () {
         Route::get('/login', [StaffLoginController::class, 'showLoginForm'])->name('login');
         Route::post('/login', [StaffLoginController::class, 'login']);
+        Route::get('/forgot-password', [PasswordResetCodeController::class, 'showRequestForm'])->defaults('portal', 'staff')->name('password.request');
+        Route::post('/forgot-password', [PasswordResetCodeController::class, 'sendCode'])->defaults('portal', 'staff')->middleware('throttle:5,1')->name('password.email');
+        Route::get('/verify-reset-code', [PasswordResetCodeController::class, 'showCodeForm'])->defaults('portal', 'staff')->name('password.code');
+        Route::post('/verify-reset-code', [PasswordResetCodeController::class, 'verifyCode'])->defaults('portal', 'staff')->middleware('throttle:10,1')->name('password.verify');
+        Route::get('/reset-password', [PasswordResetCodeController::class, 'showResetForm'])->defaults('portal', 'staff')->name('password.reset');
+        Route::post('/reset-password', [PasswordResetCodeController::class, 'resetPassword'])->defaults('portal', 'staff')->name('password.update');
     });
 
     Route::middleware('auth.staff')->group(function () {
@@ -114,6 +127,12 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::post('/login', [CustomerLoginController::class, 'login']);
         Route::get('/register', [CustomerLoginController::class, 'showRegistrationForm'])->name('register');
         Route::post('/register', [CustomerLoginController::class, 'register']);
+        Route::get('/forgot-password', [PasswordResetCodeController::class, 'showRequestForm'])->defaults('portal', 'customer')->name('password.request');
+        Route::post('/forgot-password', [PasswordResetCodeController::class, 'sendCode'])->defaults('portal', 'customer')->middleware('throttle:5,1')->name('password.email');
+        Route::get('/verify-reset-code', [PasswordResetCodeController::class, 'showCodeForm'])->defaults('portal', 'customer')->name('password.code');
+        Route::post('/verify-reset-code', [PasswordResetCodeController::class, 'verifyCode'])->defaults('portal', 'customer')->middleware('throttle:10,1')->name('password.verify');
+        Route::get('/reset-password', [PasswordResetCodeController::class, 'showResetForm'])->defaults('portal', 'customer')->name('password.reset');
+        Route::post('/reset-password', [PasswordResetCodeController::class, 'resetPassword'])->defaults('portal', 'customer')->name('password.update');
     });
 
     Route::middleware('auth.customer')->group(function () {

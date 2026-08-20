@@ -87,6 +87,12 @@
                     <h2 class="text-2xl font-black text-[#0b2b69]">Log In</h2>
                     <p class="mt-1 text-xs font-medium text-slate-500">Enter your credentials to access your account</p>
 
+                    @if (session('status'))
+                        <div class="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700" role="status">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
                     @if ($errors->any())
                         <div class="mt-5 flex gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
                             <svg class="mt-0.5 h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v6M12 17h.01"></path></svg>
@@ -120,10 +126,13 @@
                             </div>
                         </div>
 
-                        <label class="flex cursor-pointer items-center gap-2 text-xs font-medium text-slate-600">
-                            <input type="checkbox" name="remember" value="1" @checked(old('remember')) class="h-4 w-4 rounded border-slate-300 accent-[#1265e8]">
-                            Remember me
-                        </label>
+                        <div class="flex items-center justify-between gap-3 text-xs font-medium">
+                            <label class="flex cursor-pointer items-center gap-2 text-slate-600">
+                                <input type="checkbox" name="remember" value="1" @checked(old('remember')) class="h-4 w-4 rounded border-slate-300 accent-[#1265e8]">
+                                Remember me
+                            </label>
+                            <a href="{{ route($selectedPortal.'.password.request') }}" class="font-semibold text-[#1265e8] hover:underline">Forgot password?</a>
+                        </div>
 
                         <button type="submit" class="flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#0d5fe9] text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition hover:-translate-y-0.5 hover:bg-[#084fc9]">
                             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3M14 4h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5"></path></svg>
