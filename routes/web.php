@@ -80,6 +80,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/notifications/{id}/goto', [AdminPortalController::class, 'gotoNotification'])->name('notifications.goto');
         Route::delete('/announcements/{announcement}', [AdminPortalController::class, 'destroyAnnouncement'])->name('announcements.destroy');
         Route::get('/settings', [AdminPortalController::class, 'settings'])->name('settings');
+        Route::put('/settings/profile', [AdminPortalController::class, 'updateProfile'])->name('settings.profile');
         Route::post('/settings/password', [AdminPortalController::class, 'updatePassword'])->name('settings.password');
     });
 });

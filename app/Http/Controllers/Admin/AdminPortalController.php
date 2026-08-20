@@ -563,6 +563,28 @@ class AdminPortalController extends Controller
         return back()->with('success', 'Password updated successfully.');
     }
 
+    public function updateProfile(Request $request)
+    {
+        $admin = auth('admin')->user();
+        $validated = $request->validate([
+            'first_name' => ['required', 'string', 'max:50'],
+            'last_name' => ['required', 'string', 'max:50'],
+            'email' => ['required', 'email', 'max:100', Rule::unique('admins', 'email')->ignore($admin->id)],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'current_password' => ['required', 'string'],
+        ]);
+
+        if (!Hash::check($validated['current_password'], $admin->password)) {
+            return back()->withErrors(['current_password' => 'The current password is incorrect.'])
+                ->withInput($request->except(['current_password']));
+        }
+
+        unset($validated['current_password']);
+        $admin->update($validated);
+
+        return back()->with('success', 'Admin details updated successfully.');
+    }
+
     public function toggleStaffActive(Staff $staff)
     {
         $staff->is_active = !$staff->is_active;
