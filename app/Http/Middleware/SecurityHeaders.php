@@ -53,7 +53,6 @@ class SecurityHeaders
             "font-src 'self' data: https://cdnjs.cloudflare.com",
             "img-src 'self' data: blob: https://*.tile.openstreetmap.org https://www.google.com https://www.gstatic.com",
             "connect-src 'self' https://nominatim.openstreetmap.org https://*.tile.openstreetmap.org https://www.google.com",
-            "frame-src https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/",
             "worker-src 'self' blob: https://cdn.jsdelivr.net",
             app()->environment('production') ? 'upgrade-insecure-requests' : '',
         ]);

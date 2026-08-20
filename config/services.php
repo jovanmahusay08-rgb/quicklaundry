@@ -9,12 +9,6 @@ return [
         'key' => env('GOOGLE_MAPS_API_KEY'),
     ],
 
-    'recaptcha' => [
-        'site_key' => env('RECAPTCHA_SITE_KEY'),
-        'secret_key' => env('RECAPTCHA_SECRET_KEY'),
-        'hostname' => env('RECAPTCHA_HOSTNAME', parse_url(env('APP_URL', ''), PHP_URL_HOST)),
-    ],
-
     'gcash' => [
         'account_name' => env('GCASH_ACCOUNT_NAME'),
         'number' => env('GCASH_NUMBER'),

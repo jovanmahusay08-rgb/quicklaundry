@@ -4,34 +4,28 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
-use App\Services\LoginSecurity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AdminLoginController extends Controller
 {
-    public function showLoginForm(Request $request, LoginSecurity $security)
+    public function showLoginForm()
     {
-        return view('auth.admin-login', [
-            'showCaptcha' => $security->requiresCaptcha('admin', $request, old('email')),
-        ]);
+        return view('auth.admin-login');
     }
 
-    public function login(Request $request, LoginSecurity $security)
+    public function login(Request $request)
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
-        $security->enforceCaptcha($request, 'admin', $credentials['email']);
-
         $adminAccount = \App\Models\Admin::where('email', $credentials['email'])->first();
         if ($adminAccount && !$adminAccount->is_active) {
             return back()->withErrors(['email' => 'Your account is deactivated.'])->onlyInput('email');
         }
 
         if (Auth::guard('admin')->attempt($credentials, $request->boolean('remember'))) {
-            $security->clear('admin', $request, $credentials['email']);
             $request->session()->regenerate();
 
             $admin = Auth::guard('admin')->user();
@@ -41,8 +35,6 @@ class AdminLoginController extends Controller
 
             return redirect()->intended(route('admin.dashboard'));
         }
-
-        $security->recordFailure('admin', $request, $credentials['email']);
 
         return back()->withErrors([
             'email' => 'These credentials do not match our admin records.',
