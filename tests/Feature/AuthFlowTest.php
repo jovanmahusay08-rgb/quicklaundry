@@ -10,6 +10,13 @@ class AuthFlowTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_only_customer_login_shows_account_registration(): void
+    {
+        $this->get(route('admin.login'))->assertOk()->assertDontSee('Create an Account');
+        $this->get(route('staff.login'))->assertOk()->assertDontSee('Create an Account');
+        $this->get(route('customer.login'))->assertOk()->assertSee('Create an Account');
+    }
+
     public function test_user_can_register_and_login(): void
     {
         $response = $this->post('/customer/register', [

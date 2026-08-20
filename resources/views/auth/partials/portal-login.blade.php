@@ -140,16 +140,18 @@
                         </button>
                     </form>
 
-                    <div class="my-6 flex items-center gap-4 text-xs text-slate-400">
-                        <span class="h-px flex-1 bg-slate-200"></span>
-                        <span>or</span>
-                        <span class="h-px flex-1 bg-slate-200"></span>
-                    </div>
+                    @if ($selectedPortal === 'customer')
+                        <div class="my-6 flex items-center gap-4 text-xs text-slate-400">
+                            <span class="h-px flex-1 bg-slate-200"></span>
+                            <span>or</span>
+                            <span class="h-px flex-1 bg-slate-200"></span>
+                        </div>
 
-                    <a href="{{ route('customer.register') }}" class="flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-[#1769ed] bg-white text-sm font-bold text-[#0d5fe9] transition hover:bg-blue-50">
-                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="7" r="3"></circle><path d="M3 20a6 6 0 0 1 12 0M19 8v6M16 11h6"></path></svg>
-                        Create an Account
-                    </a>
+                        <a href="{{ route('customer.register') }}" class="flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-[#1769ed] bg-white text-sm font-bold text-[#0d5fe9] transition hover:bg-blue-50">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="7" r="3"></circle><path d="M3 20a6 6 0 0 1 12 0M19 8v6M16 11h6"></path></svg>
+                            Create an Account
+                        </a>
+                    @endif
 
                     <a href="{{ route('home') }}" class="mt-5 flex items-center justify-center gap-2 text-xs font-semibold text-slate-500 transition hover:text-[#1265e8]">
                         <span aria-hidden="true">←</span> Back to home
