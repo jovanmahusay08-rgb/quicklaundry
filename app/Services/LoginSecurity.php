@@ -14,10 +14,22 @@ class LoginSecurity
 
     public function requiresCaptcha(string $portal, Request $request, ?string $email = null): bool
     {
+        // Never lock legitimate users behind a widget that cannot be rendered or
+        // verified. Route throttling remains active until credentials are added.
+        if (!$this->isCaptchaConfigured()) {
+            return false;
+        }
+
         $email ??= $request->session()->get("login_security.email.{$portal}");
 
         return is_string($email)
             && Cache::get($this->attemptKey($portal, $request->ip(), $email), 0) >= self::CAPTCHA_THRESHOLD;
+    }
+
+    private function isCaptchaConfigured(): bool
+    {
+        return filled(config('services.recaptcha.site_key'))
+            && filled(config('services.recaptcha.secret_key'));
     }
 
     public function enforceCaptcha(Request $request, string $portal, string $email): void

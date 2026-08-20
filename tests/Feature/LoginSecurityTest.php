@@ -104,4 +104,34 @@ class LoginSecurityTest extends TestCase
         $this->assertSame('test-secret-key', $security->verifiedTokens[0]['secret']);
         $this->assertSame('valid-single-use-token', $security->verifiedTokens[0]['token']);
     }
+
+    public function test_missing_recaptcha_keys_never_lock_users_behind_an_unusable_widget(): void
+    {
+        config([
+            'services.recaptcha.site_key' => null,
+            'services.recaptcha.secret_key' => null,
+        ]);
+        $customer = Customer::create([
+            'first_name' => 'Casey', 'last_name' => 'Customer', 'email' => 'no-captcha@example.com',
+            'password' => 'correct-password', 'phone' => '09123456789', 'address' => 'Main Street',
+            'barangay' => 'Poblacion',
+        ]);
+
+        for ($attempt = 0; $attempt < 3; $attempt++) {
+            $this->post(route('customer.login'), [
+                'email' => $customer->email,
+                'password' => 'wrong-password',
+            ])->assertSessionHasErrors('email');
+        }
+
+        $this->get(route('customer.login'))
+            ->assertOk()
+            ->assertDontSee('reCAPTCHA is not configured');
+
+        $this->post(route('customer.login'), [
+            'email' => $customer->email,
+            'password' => 'correct-password',
+        ])->assertRedirect(route('customer.dashboard'));
+        $this->assertAuthenticatedAs($customer, 'customer');
+    }
 }
