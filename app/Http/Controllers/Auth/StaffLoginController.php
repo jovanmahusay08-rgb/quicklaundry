@@ -4,22 +4,26 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Services\LoginSecurity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class StaffLoginController extends Controller
 {
-    public function showLoginForm()
+    public function showLoginForm(Request $request, LoginSecurity $security)
     {
-        return view('auth.staff-login');
+        return view('auth.staff-login', [
+            'showCaptcha' => $security->requiresCaptcha('staff', $request, old('email')),
+        ]);
     }
 
-    public function login(Request $request)
+    public function login(Request $request, LoginSecurity $security)
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
+        $security->enforceCaptcha($request, 'staff', $credentials['email']);
 
         // Check if the staff exists and is active
         $staff = \App\Models\Staff::where('email', $credentials['email'])->first();
@@ -30,6 +34,7 @@ class StaffLoginController extends Controller
         }
 
         if (Auth::guard('staff')->attempt($credentials, $request->boolean('remember'))) {
+            $security->clear('staff', $request, $credentials['email']);
             $request->session()->regenerate();
 
             $staff = Auth::guard('staff')->user();
@@ -39,6 +44,8 @@ class StaffLoginController extends Controller
 
             return redirect()->intended(route('staff.dashboard'));
         }
+
+        $security->recordFailure('staff', $request, $credentials['email']);
 
         return back()->withErrors([
             'email' => 'These credentials do not match our staff records.',

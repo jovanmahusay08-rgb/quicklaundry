@@ -61,11 +61,11 @@ class PasswordResetCodeTest extends TestCase
                 ->assertRedirect(route("{$portal}.password.reset"));
 
             $this->post(route("{$portal}.password.update"), [
-                'password' => 'new-secure-password',
-                'password_confirmation' => 'new-secure-password',
+                'password' => 'NewSecure!2026',
+                'password_confirmation' => 'NewSecure!2026',
             ])->assertRedirect(route("{$portal}.login"));
 
-            $this->assertTrue(Hash::check('new-secure-password', $account->fresh()->password));
+            $this->assertTrue(Hash::check('NewSecure!2026', $account->fresh()->password));
         }
     }
 

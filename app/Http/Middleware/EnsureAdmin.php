@@ -15,6 +15,15 @@ class EnsureAdmin
             return redirect()->route('admin.login');
         }
 
+        $admin = Auth::guard('admin')->user();
+        if ($admin && $admin->is_active === false) {
+            Auth::guard('admin')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('admin.login')->withErrors(['email' => 'Your account is deactivated.']);
+        }
+
         return $next($request);
     }
 }

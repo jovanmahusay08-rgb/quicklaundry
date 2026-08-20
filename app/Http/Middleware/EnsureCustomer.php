@@ -15,6 +15,15 @@ class EnsureCustomer
             return redirect()->route('customer.login');
         }
 
+        $customer = Auth::guard('customer')->user();
+        if ($customer && $customer->is_active === false) {
+            Auth::guard('customer')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('customer.login')->withErrors(['email' => 'Your account is deactivated.']);
+        }
+
         return $next($request);
     }
 }

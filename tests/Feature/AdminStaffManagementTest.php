@@ -34,8 +34,8 @@ class AdminStaffManagementTest extends TestCase
             'barangay' => 'Poblacion',
             'salary' => '15000',
             'hire_date' => '2026-08-20',
-            'password' => 'temporary-password',
-            'password_confirmation' => 'temporary-password',
+            'password' => 'Temporary!2026',
+            'password_confirmation' => 'Temporary!2026',
         ]);
 
         $response->assertRedirect(route('admin.staff'))
@@ -43,7 +43,7 @@ class AdminStaffManagementTest extends TestCase
         $staff = Staff::where('email', 'stella@example.com')->firstOrFail();
         $this->assertSame('Processor', $staff->role);
         $this->assertTrue($staff->is_active);
-        $this->assertTrue(Hash::check('temporary-password', $staff->password));
+        $this->assertTrue(Hash::check('Temporary!2026', $staff->password));
     }
 
     public function test_guest_cannot_create_a_staff_account(): void
@@ -54,8 +54,8 @@ class AdminStaffManagementTest extends TestCase
             'email' => 'blocked@example.com',
             'phone' => '09123456789',
             'role' => 'Driver',
-            'password' => 'temporary-password',
-            'password_confirmation' => 'temporary-password',
+            'password' => 'Temporary!2026',
+            'password_confirmation' => 'Temporary!2026',
         ])->assertRedirect(route('admin.login'));
 
         $this->assertDatabaseMissing('staff', ['email' => 'blocked@example.com']);
@@ -87,14 +87,14 @@ class AdminStaffManagementTest extends TestCase
             'barangay' => 'Pooc',
             'salary' => '18000',
             'hire_date' => '2026-08-21',
-            'password' => 'updated-password',
-            'password_confirmation' => 'updated-password',
+            'password' => 'Updated!2026',
+            'password_confirmation' => 'Updated!2026',
         ])->assertRedirect(route('admin.staff'));
 
         $staff->refresh();
         $this->assertSame('Updated', $staff->last_name);
         $this->assertSame('Quality Check', $staff->role);
-        $this->assertTrue(Hash::check('updated-password', $staff->password));
+        $this->assertTrue(Hash::check('Updated!2026', $staff->password));
     }
 
     public function test_admin_can_delete_staff_and_existing_orders_become_unassigned(): void

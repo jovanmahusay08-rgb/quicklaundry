@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\CustomerLoginController;
 use App\Http\Controllers\Auth\PasswordResetCodeController;
 use App\Http\Controllers\Auth\StaffLoginController;
 use App\Http\Controllers\Customer\DashboardController as CustomerDashboardController;
+use App\Http\Controllers\PaymentProofController;
 use App\Http\Controllers\Staff\DashboardController as StaffDashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,8 @@ Route::get('/app/download', function () {
     ]);
 })->name('app.download');
 
+Route::get('/payments/{payment}/proof', PaymentProofController::class)->name('payments.proof');
+
 /*
 |--------------------------------------------------------------------------
 | Admin portal (guard: admin)
@@ -37,13 +40,13 @@ Route::get('/app/download', function () {
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('guest:admin')->group(function () {
         Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('login');
-        Route::post('/login', [AdminLoginController::class, 'login']);
+        Route::post('/login', [AdminLoginController::class, 'login'])->middleware('throttle:10,1');
         Route::get('/forgot-password', [PasswordResetCodeController::class, 'showRequestForm'])->defaults('portal', 'admin')->name('password.request');
         Route::post('/forgot-password', [PasswordResetCodeController::class, 'sendCode'])->defaults('portal', 'admin')->middleware('throttle:5,1')->name('password.email');
         Route::get('/verify-reset-code', [PasswordResetCodeController::class, 'showCodeForm'])->defaults('portal', 'admin')->name('password.code');
         Route::post('/verify-reset-code', [PasswordResetCodeController::class, 'verifyCode'])->defaults('portal', 'admin')->middleware('throttle:10,1')->name('password.verify');
         Route::get('/reset-password', [PasswordResetCodeController::class, 'showResetForm'])->defaults('portal', 'admin')->name('password.reset');
-        Route::post('/reset-password', [PasswordResetCodeController::class, 'resetPassword'])->defaults('portal', 'admin')->name('password.update');
+        Route::post('/reset-password', [PasswordResetCodeController::class, 'resetPassword'])->defaults('portal', 'admin')->middleware('throttle:5,1')->name('password.update');
     });
 
     Route::middleware('auth.admin')->group(function () {
@@ -80,8 +83,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/notifications/{id}/goto', [AdminPortalController::class, 'gotoNotification'])->name('notifications.goto');
         Route::delete('/announcements/{announcement}', [AdminPortalController::class, 'destroyAnnouncement'])->name('announcements.destroy');
         Route::get('/settings', [AdminPortalController::class, 'settings'])->name('settings');
-        Route::put('/settings/profile', [AdminPortalController::class, 'updateProfile'])->name('settings.profile');
-        Route::post('/settings/password', [AdminPortalController::class, 'updatePassword'])->name('settings.password');
+        Route::put('/settings/profile', [AdminPortalController::class, 'updateProfile'])->middleware('throttle:5,1')->name('settings.profile');
+        Route::post('/settings/password', [AdminPortalController::class, 'updatePassword'])->middleware('throttle:5,1')->name('settings.password');
     });
 });
 
@@ -93,13 +96,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::prefix('staff')->name('staff.')->group(function () {
     Route::middleware('guest:staff')->group(function () {
         Route::get('/login', [StaffLoginController::class, 'showLoginForm'])->name('login');
-        Route::post('/login', [StaffLoginController::class, 'login']);
+        Route::post('/login', [StaffLoginController::class, 'login'])->middleware('throttle:10,1');
         Route::get('/forgot-password', [PasswordResetCodeController::class, 'showRequestForm'])->defaults('portal', 'staff')->name('password.request');
         Route::post('/forgot-password', [PasswordResetCodeController::class, 'sendCode'])->defaults('portal', 'staff')->middleware('throttle:5,1')->name('password.email');
         Route::get('/verify-reset-code', [PasswordResetCodeController::class, 'showCodeForm'])->defaults('portal', 'staff')->name('password.code');
         Route::post('/verify-reset-code', [PasswordResetCodeController::class, 'verifyCode'])->defaults('portal', 'staff')->middleware('throttle:10,1')->name('password.verify');
         Route::get('/reset-password', [PasswordResetCodeController::class, 'showResetForm'])->defaults('portal', 'staff')->name('password.reset');
-        Route::post('/reset-password', [PasswordResetCodeController::class, 'resetPassword'])->defaults('portal', 'staff')->name('password.update');
+        Route::post('/reset-password', [PasswordResetCodeController::class, 'resetPassword'])->defaults('portal', 'staff')->middleware('throttle:5,1')->name('password.update');
     });
 
     Route::middleware('auth.staff')->group(function () {
@@ -113,7 +116,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
         Route::get('/pickups', [StaffDashboardController::class, 'pickups'])->name('pickups');
         Route::get('/deliveries', [StaffDashboardController::class, 'deliveries'])->name('deliveries');
         Route::get('/receipt/{booking}', [StaffDashboardController::class, 'receipt'])->name('receipt');
-        Route::post('/payments/{payment}/confirm', [StaffDashboardController::class, 'confirmPayment'])->name('payments.confirm');
+        Route::post('/payments/{payment}/confirm', [StaffDashboardController::class, 'confirmPayment'])->middleware('throttle:10,1')->name('payments.confirm');
         Route::get('/notifications', [StaffDashboardController::class, 'notifications'])->name('notifications');
         Route::post('/notifications/mark-all-read', [StaffDashboardController::class, 'markAllNotificationsRead'])->name('notifications.mark-all-read');
         Route::get('/notifications/{id}/goto', [StaffDashboardController::class, 'gotoNotification'])->name('notifications.goto');
@@ -129,15 +132,15 @@ Route::prefix('staff')->name('staff.')->group(function () {
 Route::prefix('customer')->name('customer.')->group(function () {
     Route::middleware('guest:customer')->group(function () {
         Route::get('/login', [CustomerLoginController::class, 'showLoginForm'])->name('login');
-        Route::post('/login', [CustomerLoginController::class, 'login']);
+        Route::post('/login', [CustomerLoginController::class, 'login'])->middleware('throttle:10,1');
         Route::get('/register', [CustomerLoginController::class, 'showRegistrationForm'])->name('register');
-        Route::post('/register', [CustomerLoginController::class, 'register']);
+        Route::post('/register', [CustomerLoginController::class, 'register'])->middleware('throttle:5,1');
         Route::get('/forgot-password', [PasswordResetCodeController::class, 'showRequestForm'])->defaults('portal', 'customer')->name('password.request');
         Route::post('/forgot-password', [PasswordResetCodeController::class, 'sendCode'])->defaults('portal', 'customer')->middleware('throttle:5,1')->name('password.email');
         Route::get('/verify-reset-code', [PasswordResetCodeController::class, 'showCodeForm'])->defaults('portal', 'customer')->name('password.code');
         Route::post('/verify-reset-code', [PasswordResetCodeController::class, 'verifyCode'])->defaults('portal', 'customer')->middleware('throttle:10,1')->name('password.verify');
         Route::get('/reset-password', [PasswordResetCodeController::class, 'showResetForm'])->defaults('portal', 'customer')->name('password.reset');
-        Route::post('/reset-password', [PasswordResetCodeController::class, 'resetPassword'])->defaults('portal', 'customer')->name('password.update');
+        Route::post('/reset-password', [PasswordResetCodeController::class, 'resetPassword'])->defaults('portal', 'customer')->middleware('throttle:5,1')->name('password.update');
     });
 
     Route::middleware('auth.customer')->group(function () {
@@ -147,19 +150,19 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('/bookings/create', [CustomerDashboardController::class, 'createBooking'])->name('bookings.create');
         Route::post('/bookings', [CustomerDashboardController::class, 'storeBooking'])->name('bookings.store');
         Route::get('/bookings/{booking}', [CustomerDashboardController::class, 'showBooking'])->name('bookings.show');
-        Route::post('/bookings/{booking}/location', [CustomerDashboardController::class, 'updateLocation'])->name('bookings.location.update');
+        Route::post('/bookings/{booking}/location', [CustomerDashboardController::class, 'updateLocation'])->middleware('throttle:30,1')->name('bookings.location.update');
         Route::get('/bookings/{booking}/payment/resume', [CustomerDashboardController::class, 'resumePayment'])->name('bookings.payment.resume');
         Route::post('/bookings/{booking}/pay', [CustomerDashboardController::class, 'processPayment'])->name('bookings.pay');
         Route::get('/bookings/{booking}/receipt', [CustomerDashboardController::class, 'downloadReceipt'])->name('bookings.receipt');
         Route::get('/payments/{payment}/cash-processing', [CustomerDashboardController::class, 'showCashPaymentProcessing'])->name('payments.cash-processing');
         Route::get('/payments/{payment}/gcash', [CustomerDashboardController::class, 'showGcashPayment'])->name('payments.gcash');
-        Route::post('/payments/{payment}/gcash', [CustomerDashboardController::class, 'submitGcashPayment'])->name('payments.gcash.submit');
+        Route::post('/payments/{payment}/gcash', [CustomerDashboardController::class, 'submitGcashPayment'])->middleware('throttle:5,1')->name('payments.gcash.submit');
         Route::get('/tracking', [CustomerDashboardController::class, 'tracking'])->name('tracking');
         Route::get('/loyalty', [CustomerDashboardController::class, 'loyalty'])->name('loyalty');
         Route::get('/notifications', [CustomerDashboardController::class, 'notifications'])->name('notifications');
         Route::post('/notifications/mark-all-read', [CustomerDashboardController::class, 'markAllNotificationsRead'])->name('notifications.mark-all-read');
         Route::get('/notifications/{id}/goto', [CustomerDashboardController::class, 'gotoNotification'])->name('notifications.goto');
         Route::get('/profile', [CustomerDashboardController::class, 'profile'])->name('profile');
-        Route::put('/profile', [CustomerDashboardController::class, 'updateProfile'])->name('profile.update');
+        Route::put('/profile', [CustomerDashboardController::class, 'updateProfile'])->middleware('throttle:5,1')->name('profile.update');
     });
 });

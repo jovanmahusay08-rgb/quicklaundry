@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class AdminPortalController extends Controller
 {
@@ -152,7 +153,7 @@ class AdminPortalController extends Controller
             'barangay' => ['nullable', 'in:Balidbid,Bantigue,Langub,Maricaban,Okoy,Poblacion,Pooc,Talisay'],
             'salary' => ['nullable', 'numeric', 'min:0'],
             'hire_date' => ['nullable', 'date'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'confirmed', Password::min(12)->mixedCase()->letters()->numbers()->symbols()],
         ]);
 
         Staff::create($validated + ['is_active' => true]);
@@ -178,7 +179,7 @@ class AdminPortalController extends Controller
             'barangay' => ['nullable', 'in:Balidbid,Bantigue,Langub,Maricaban,Okoy,Poblacion,Pooc,Talisay'],
             'salary' => ['nullable', 'numeric', 'min:0'],
             'hire_date' => ['nullable', 'date'],
-            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'password' => ['nullable', 'confirmed', Password::min(12)->mixedCase()->letters()->numbers()->symbols()],
         ]);
 
         $password = $validated['password'] ?? null;
@@ -546,7 +547,7 @@ class AdminPortalController extends Controller
     {
         $request->validate([
             'current_password' => 'required',
-            'password' => 'required|confirmed|min:8',
+            'password' => ['required', 'confirmed', Password::min(12)->mixedCase()->letters()->numbers()->symbols()],
         ]);
 
         $admin = auth('admin')->user();
@@ -557,6 +558,8 @@ class AdminPortalController extends Controller
 
         $admin->password = Hash::make($request->password);
         $admin->save();
+        $request->session()->regenerate();
+        $request->session()->regenerateToken();
 
         return back()->with('success', 'Password updated successfully.');
     }

@@ -134,6 +134,17 @@
                             <a href="{{ route($selectedPortal.'.password.request') }}" class="font-semibold text-[#1265e8] hover:underline">Forgot password?</a>
                         </div>
 
+                        @if ($showCaptcha ?? false)
+                            <div class="rounded-xl border border-amber-200 bg-amber-50 p-4">
+                                <p class="mb-3 text-xs font-semibold text-amber-800">Security verification is required after multiple failed login attempts.</p>
+                                @if (config('services.recaptcha.site_key'))
+                                    <div class="g-recaptcha max-w-full overflow-hidden" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                                @else
+                                    <p class="text-xs font-semibold text-red-700">reCAPTCHA is not configured. Contact the system administrator.</p>
+                                @endif
+                            </div>
+                        @endif
+
                         <button type="submit" class="flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#0d5fe9] text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition hover:-translate-y-0.5 hover:bg-[#084fc9]">
                             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3M14 4h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5"></path></svg>
                             Log In
@@ -163,6 +174,10 @@
         <p class="mt-8 text-center text-xs font-medium text-slate-500">&copy; {{ date('Y') }} QuickWash Express. All rights reserved.</p>
     </div>
 </div>
+
+@if ($showCaptcha ?? false)
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+@endif
 
 <script>
     (() => {

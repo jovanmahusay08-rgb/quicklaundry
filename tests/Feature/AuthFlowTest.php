@@ -23,8 +23,8 @@ class AuthFlowTest extends TestCase
             'first_name' => 'Alice',
             'last_name' => 'Smith',
             'email' => 'alice@example.com',
-            'password' => 'secret123',
-            'password_confirmation' => 'secret123',
+            'password' => 'Secret!12345',
+            'password_confirmation' => 'Secret!12345',
             'phone' => '09123456789',
             'address' => '123 Main St',
             'barangay' => 'Poblacion',
@@ -39,7 +39,7 @@ class AuthFlowTest extends TestCase
 
         $loginResponse = $this->post('/customer/login', [
             'email' => 'alice@example.com',
-            'password' => 'secret123',
+            'password' => 'Secret!12345',
         ]);
 
         $loginResponse->assertRedirect('/customer/dashboard');

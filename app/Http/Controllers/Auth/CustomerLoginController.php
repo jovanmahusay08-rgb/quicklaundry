@@ -6,26 +6,37 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Customer;
 use App\Models\LoyaltyPoint;
+use App\Services\LoginSecurity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class CustomerLoginController extends Controller
 {
-    public function showLoginForm()
+    public function showLoginForm(Request $request, LoginSecurity $security)
     {
-        return view('auth.customer-login');
+        return view('auth.customer-login', [
+            'showCaptcha' => $security->requiresCaptcha('customer', $request, old('email')),
+        ]);
     }
 
-    public function login(Request $request)
+    public function login(Request $request, LoginSecurity $security)
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
+        $security->enforceCaptcha($request, 'customer', $credentials['email']);
+
+        $customerAccount = Customer::where('email', $credentials['email'])->first();
+        if ($customerAccount && !$customerAccount->is_active) {
+            return back()->withErrors(['email' => 'Your account is deactivated.'])->onlyInput('email');
+        }
 
         if (Auth::guard('customer')->attempt($credentials, $request->boolean('remember'))) {
+            $security->clear('customer', $request, $credentials['email']);
             $request->session()->regenerate();
 
             $customer = Auth::guard('customer')->user();
@@ -44,6 +55,8 @@ class CustomerLoginController extends Controller
             return redirect()->intended(route('customer.dashboard'));
         }
 
+        $security->recordFailure('customer', $request, $credentials['email']);
+
         return back()->withErrors([
             'email' => 'These credentials do not match our records.',
         ])->onlyInput('email');
@@ -60,7 +73,7 @@ class CustomerLoginController extends Controller
             'first_name' => ['required', 'string', 'max:50'],
             'last_name' => ['required', 'string', 'max:50'],
             'email' => ['required', 'email', Rule::unique('customers', 'email')],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'confirmed', Password::min(12)->mixedCase()->letters()->numbers()->symbols()],
             'phone' => ['required', 'digits:11'],
             'address' => ['required', 'string'],
             'barangay' => ['required', Rule::in([

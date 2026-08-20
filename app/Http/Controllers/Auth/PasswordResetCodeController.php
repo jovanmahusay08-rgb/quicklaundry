@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
 class PasswordResetCodeController extends Controller
@@ -117,7 +118,7 @@ class PasswordResetCodeController extends Controller
         }
 
         $data = $request->validate([
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'confirmed', Password::min(12)->mixedCase()->letters()->numbers()->symbols()],
         ]);
         $model = $this->modelFor($portal);
         $account = $model::whereRaw('LOWER(email) = ?', [

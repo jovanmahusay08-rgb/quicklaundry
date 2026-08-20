@@ -150,8 +150,8 @@
                     <p class="mt-2"><strong>Reference:</strong> {{ $booking->latestPayment->gcash_reference }}</p>
                 </div>
                 @if($booking->latestPayment->proof_image)
-                    <a href="{{ asset('storage/'.$booking->latestPayment->proof_image) }}" target="_blank" rel="noopener">
-                        <img src="{{ asset('storage/'.$booking->latestPayment->proof_image) }}" alt="GCash receipt" class="max-h-64 w-full rounded-lg border border-slate-200 object-contain">
+                    <a href="{{ route('payments.proof', $booking->latestPayment) }}" target="_blank" rel="noopener">
+                        <img src="{{ route('payments.proof', $booking->latestPayment) }}" alt="GCash receipt" class="max-h-64 w-full rounded-lg border border-slate-200 object-contain">
                     </a>
                 @endif
             </div>

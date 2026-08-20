@@ -10,6 +10,7 @@ use App\Models\LaundryService;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class DashboardController extends Controller
@@ -377,10 +378,14 @@ class DashboardController extends Controller
         $data = $request->validate([
             'gcash_sender_number' => ['required', 'regex:/^09[0-9]{9}$/'],
             'gcash_reference' => ['required', 'string', 'min:6', 'max:100'],
-            'proof_image' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'proof_image' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120', 'dimensions:max_width=6000,max_height=6000'],
         ]);
 
-        $path = $request->file('proof_image')->store('payment-proofs', 'public');
+        if ($payment->proof_image) {
+            Storage::disk('local')->delete($payment->proof_image);
+            Storage::disk('public')->delete($payment->proof_image);
+        }
+        $path = $request->file('proof_image')->store('payment-proofs', 'local');
         $payment->update([
             'gcash_sender_number' => $data['gcash_sender_number'],
             'gcash_reference' => $data['gcash_reference'],
