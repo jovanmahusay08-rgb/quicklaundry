@@ -7,7 +7,9 @@
 
     <application
         android:allowBackup="true"
-        android:label="QuickWash Customer"
+        android:icon="@drawable/quickwash_logo"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/quickwash_logo"
         android:theme="@style/Theme.QuickWash"
         android:usesCleartextTraffic="false">
         <activity

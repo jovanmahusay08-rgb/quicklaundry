@@ -22,6 +22,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
     private lateinit var refreshLayout: SwipeRefreshLayout
+    private lateinit var loadingPage: View
     private lateinit var navigationItems: List<NavigationItem>
     private var fileSelectionCallback: ValueCallback<Array<Uri>>? = null
     private var geolocationCallback: GeolocationPermissions.Callback? = null
@@ -62,6 +64,7 @@ class MainActivity : AppCompatActivity() {
 
         webView = findViewById(R.id.webView)
         refreshLayout = findViewById(R.id.refreshLayout)
+        loadingPage = findViewById(R.id.loadingPage)
         navigationItems = listOf(
             NavigationItem(findViewById(R.id.navDashboard), findViewById(R.id.navDashboardIcon), findViewById(R.id.navDashboardLabel), "/customer/dashboard"),
             NavigationItem(findViewById(R.id.navBookings), findViewById(R.id.navBookingsIcon), findViewById(R.id.navBookingsLabel), "/customer/bookings"),
@@ -108,6 +111,11 @@ class MainActivity : AppCompatActivity() {
             override fun onPageFinished(view: WebView, url: String) {
                 refreshLayout.isRefreshing = false
                 updateSelectedNavigation(Uri.parse(url).path.orEmpty())
+                loadingPage.animate()
+                    .alpha(0f)
+                    .setDuration(250L)
+                    .withEndAction { loadingPage.visibility = View.GONE }
+                    .start()
             }
         }
         webView.webChromeClient = object : WebChromeClient() {

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">QuickWash Customer</string>
+    <string name="quickwash_logo">QuickWash logo</string>
+    <string name="loading">Loading QuickWash…</string>
+</resources>
