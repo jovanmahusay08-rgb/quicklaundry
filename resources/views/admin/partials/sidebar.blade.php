@@ -1,5 +1,6 @@
-<aside class="flex h-screen w-72 shrink-0 flex-col bg-slate-900 text-slate-100">
+<aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-50 flex h-screen w-72 -translate-x-full shrink-0 flex-col bg-slate-900 text-slate-100 shadow-2xl transition-transform duration-200 lg:static lg:z-auto lg:translate-x-0 lg:shadow-none">
     <div class="px-6 py-6 border-b border-slate-800">
+        <div class="flex items-center justify-between gap-3">
         <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
             <img src="{{ asset('images/quickwash-logo.png') }}" alt="QuickWash logo" class="h-12 w-12 rounded-full object-contain">
             <div>
@@ -7,6 +8,10 @@
                 <p class="text-xs text-slate-400">Admin Center</p>
             </div>
         </a>
+        <button id="admin-sidebar-close" type="button" class="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white lg:hidden" aria-label="Close navigation">
+            <i class="fas fa-times"></i>
+        </button>
+        </div>
     </div>
 
     <nav class="flex-1 overflow-y-auto p-4 space-y-1">

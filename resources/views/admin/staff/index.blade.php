@@ -4,7 +4,25 @@
 @section('pageTitle', 'Staff')
 
 @section('content')
-<div class="space-y-6">
+<div class="mx-auto max-w-7xl space-y-6">
+    <section class="overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-brand-900 p-6 text-white shadow-lg sm:p-8">
+        <div class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <p class="text-xs font-bold uppercase tracking-[.22em] text-sky-300">Team management</p>
+                <h2 class="mt-2 text-2xl font-black sm:text-3xl">Staff Accounts</h2>
+                <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-300">Create accounts, assign roles, update employee details, and control portal access.</p>
+            </div>
+            <button type="button" onclick="document.getElementById('create-staff-panel').open = true; document.getElementById('first_name').focus()" class="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-white px-5 text-sm font-bold text-slate-900 shadow transition hover:bg-sky-50">
+                <i class="fas fa-user-plus text-brand-600"></i> Add Staff
+            </button>
+        </div>
+    </section>
+
+    <section class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><p class="text-sm font-medium text-slate-500">Total staff</p><p class="mt-1 text-3xl font-black text-slate-900">{{ $staffStats['total'] }}</p></div>
+        <div class="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-5 shadow-sm"><p class="text-sm font-medium text-emerald-700">Active accounts</p><p class="mt-1 text-3xl font-black text-emerald-800">{{ $staffStats['active'] }}</p></div>
+        <div class="rounded-2xl border border-sky-100 bg-sky-50/70 p-5 shadow-sm"><p class="text-sm font-medium text-sky-700">Drivers</p><p class="mt-1 text-3xl font-black text-sky-800">{{ $staffStats['drivers'] }}</p></div>
+    </section>
     @if (session('success'))
         <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700" role="status">
             {{ session('success') }}
@@ -17,15 +35,15 @@
         </div>
     @endif
 
-    <details class="rounded-xl border border-slate-200 bg-white shadow-sm" @if($errors->any()) open @endif>
-        <summary class="cursor-pointer list-none px-5 py-4 font-semibold text-slate-800 [&::-webkit-details-marker]:hidden">
+    <details id="create-staff-panel" class="group rounded-2xl border border-slate-200 bg-white shadow-sm" @if($errors->any()) open @endif>
+        <summary class="cursor-pointer list-none px-5 py-4 font-semibold text-slate-800 [&::-webkit-details-marker]:hidden sm:px-6">
             <span class="flex items-center justify-between gap-4">
                 <span><i class="fas fa-user-plus mr-2 text-brand-600"></i>Create Staff Account</span>
-                <span class="text-sm font-normal text-slate-500">Add a driver, processor, or quality checker</span>
+                <span class="flex items-center gap-3 text-sm font-normal text-slate-500"><span class="hidden sm:inline">Add a driver, processor, or quality checker</span><i class="fas fa-chevron-down transition group-open:rotate-180"></i></span>
             </span>
         </summary>
 
-        <form method="POST" action="{{ route('admin.staff.store') }}" class="grid gap-4 border-t border-slate-100 p-5 md:grid-cols-2 xl:grid-cols-3">
+        <form method="POST" action="{{ route('admin.staff.store') }}" class="grid gap-5 border-t border-slate-100 bg-slate-50/50 p-5 md:grid-cols-2 xl:grid-cols-3 sm:p-6">
             @csrf
             <div>
                 <label for="first_name" class="mb-1 block text-sm font-medium text-slate-600">First name</label>
@@ -88,8 +106,15 @@
         </form>
     </details>
 
-    <form method="GET" class="bg-white rounded-xl border border-slate-200 p-4 flex flex-wrap gap-4 items-end">
-        <div class="min-w-[220px]">
+    <form method="GET" class="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:flex-row sm:items-end">
+        <div class="min-w-0 flex-1">
+            <label class="mb-1 block text-sm font-medium text-slate-600">Search staff</label>
+            <div class="relative">
+                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400"></i>
+                <input type="search" name="search" value="{{ request('search') }}" placeholder="Name, email, or phone" class="w-full rounded-lg border border-slate-300 py-2 pl-9 pr-3">
+            </div>
+        </div>
+        <div class="min-w-0 sm:w-56">
             <label class="block text-sm font-medium text-slate-600 mb-1">Role</label>
             <select name="role" class="w-full rounded-lg border border-slate-300 px-3 py-2">
                 <option value="">All roles</option>
@@ -98,10 +123,15 @@
                 <option value="Quality Check" {{ request('role') === 'Quality Check' ? 'selected' : '' }}>Quality Check</option>
             </select>
         </div>
-        <button class="rounded-lg bg-brand-600 px-4 py-2 text-white">Filter</button>
+        <div class="flex gap-2">
+            <button class="flex-1 rounded-lg bg-brand-600 px-5 py-2 font-semibold text-white hover:bg-brand-700">Filter</button>
+            @if(request()->hasAny(['search', 'role']))
+                <a href="{{ route('admin.staff') }}" class="rounded-lg border border-slate-300 px-4 py-2 text-slate-600 hover:bg-slate-50">Clear</a>
+            @endif
+        </div>
     </form>
 
-    <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+    <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div class="overflow-x-auto">
             <table class="min-w-full text-sm">
                 <thead class="bg-slate-50 text-slate-500">
@@ -116,9 +146,9 @@
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                     @forelse($staff as $member)
-                        <tr>
-                            <td class="px-5 py-3">{{ $member->full_name }}</td>
-                            <td class="px-5 py-3">{{ $member->role }}</td>
+                        <tr class="transition hover:bg-slate-50/80">
+                            <td class="px-5 py-4"><p class="font-semibold text-slate-800">{{ $member->full_name }}</p><p class="mt-0.5 text-xs text-slate-500">{{ $member->email }}</p></td>
+                            <td class="px-5 py-4"><span class="rounded-full bg-sky-50 px-2.5 py-1 text-xs font-semibold text-sky-700">{{ $member->role }}</span></td>
                             <td class="px-5 py-3">{{ $member->phone }}</td>
                             <td class="px-5 py-3">{{ $member->barangay }}</td>
                             <td class="px-5 py-3">

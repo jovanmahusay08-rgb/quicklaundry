@@ -116,6 +116,15 @@ class AdminPortalController extends Controller
     public function staff(Request $request)
     {
         $staff = Staff::query()
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $search = '%' . $request->search . '%';
+                $query->where(function ($staffQuery) use ($search) {
+                    $staffQuery->where('first_name', 'like', $search)
+                        ->orWhere('last_name', 'like', $search)
+                        ->orWhere('email', 'like', $search)
+                        ->orWhere('phone', 'like', $search);
+                });
+            })
             ->when($request->filled('role'), function ($query) use ($request) {
                 $query->where('role', $request->role);
             })
@@ -123,7 +132,13 @@ class AdminPortalController extends Controller
             ->paginate(15)
             ->appends($request->query());
 
-        return view('admin.staff.index', compact('staff'));
+        $staffStats = [
+            'total' => Staff::count(),
+            'active' => Staff::where('is_active', true)->count(),
+            'drivers' => Staff::where('role', 'Driver')->count(),
+        ];
+
+        return view('admin.staff.index', compact('staff', 'staffStats'));
     }
 
     public function storeStaff(Request $request)
