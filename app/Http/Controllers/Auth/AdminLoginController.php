@@ -14,8 +14,10 @@ class AdminLoginController extends Controller
         return view('auth.admin-login');
     }
 
-    public function login(Request $request)
+    public function login(Request $request, \App\Services\Recaptcha $recaptcha)
     {
+        $recaptcha->validate($request);
+
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],

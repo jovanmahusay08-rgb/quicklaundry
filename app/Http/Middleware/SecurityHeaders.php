@@ -48,6 +48,7 @@ class SecurityHeaders
             "object-src 'none'",
             "frame-ancestors 'none'",
             "form-action 'self'",
+            "frame-src https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/",
             "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com https://www.google.com https://www.gstatic.com",
             "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://unpkg.com",
             "font-src 'self' data: https://cdnjs.cloudflare.com",

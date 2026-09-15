@@ -69,6 +69,10 @@ class SecurityHardeningTest extends TestCase
 
     public function test_deactivated_privileged_accounts_are_denied_access(): void
     {
+        config(['services.recaptcha.site_key' => 'test-site', 'services.recaptcha.secret_key' => 'test-secret']);
+        \Illuminate\Support\Facades\Http::fake([
+            'www.google.com/recaptcha/api/siteverify' => \Illuminate\Support\Facades\Http::response(['success' => true, 'hostname' => 'localhost']),
+        ]);
         $admin = Admin::create([
             'first_name' => 'Disabled', 'last_name' => 'Admin', 'email' => 'disabled-admin@example.com',
             'password' => 'secure-password', 'is_active' => false,
@@ -77,11 +81,13 @@ class SecurityHardeningTest extends TestCase
         $customer->update(['is_active' => false]);
 
         $this->post(route('admin.login'), [
+            'g-recaptcha-response' => 'valid-token',
             'email' => $admin->email, 'password' => 'secure-password',
         ])->assertSessionHasErrors('email');
         $this->assertGuest('admin');
 
         $this->post(route('customer.login'), [
+            'g-recaptcha-response' => 'valid-token',
             'email' => $customer->email, 'password' => 'secure-password',
         ])->assertSessionHasErrors('email');
         $this->assertGuest('customer');

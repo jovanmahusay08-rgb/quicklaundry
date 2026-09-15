@@ -19,6 +19,10 @@ class AuthFlowTest extends TestCase
 
     public function test_user_can_register_and_login(): void
     {
+        config(['services.recaptcha.site_key' => 'test-site', 'services.recaptcha.secret_key' => 'test-secret']);
+        \Illuminate\Support\Facades\Http::fake([
+            'www.google.com/recaptcha/api/siteverify' => \Illuminate\Support\Facades\Http::response(['success' => true, 'hostname' => 'localhost']),
+        ]);
         $response = $this->post('/customer/register', [
             'first_name' => 'Alice',
             'last_name' => 'Smith',
@@ -38,6 +42,7 @@ class AuthFlowTest extends TestCase
         $this->assertGuest('customer');
 
         $loginResponse = $this->post('/customer/login', [
+            'g-recaptcha-response' => 'valid-token',
             'email' => 'alice@example.com',
             'password' => 'Secret!12345',
         ]);

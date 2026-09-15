@@ -26,6 +26,7 @@
             <label>Password</label>
             <input type="password" name="password" required>
         </div>
+        @include('auth.partials.recaptcha')
         <button type="submit">Login</button>
     </form>
     <p><a href="{{ route('register') }}">Create an account</a></p>

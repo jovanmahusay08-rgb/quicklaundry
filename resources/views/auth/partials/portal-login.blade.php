@@ -134,6 +134,8 @@
                             <a href="{{ route($selectedPortal.'.password.request') }}" class="font-semibold text-[#1265e8] hover:underline">Forgot password?</a>
                         </div>
 
+                        @include('auth.partials.recaptcha')
+
                         <button type="submit" class="flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#0d5fe9] text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition hover:-translate-y-0.5 hover:bg-[#084fc9]">
                             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3M14 4h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5"></path></svg>
                             Log In
