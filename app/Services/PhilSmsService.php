@@ -61,13 +61,17 @@ class PhilSmsService
                     'message' => $message,
                 ]);
 
-            if ($response->successful()) {
+            $data = $response->json();
+            $isError = !$response->successful()
+                || (is_array($data) && isset($data['status']) && strtolower((string) $data['status']) === 'error');
+
+            if (!$isError) {
                 Log::info("PhilSMS sent successfully to {$recipient}");
 
                 return [
                     'success' => true,
                     'status' => $response->status(),
-                    'data' => $response->json(),
+                    'data' => $data,
                 ];
             }
 
@@ -76,8 +80,9 @@ class PhilSmsService
             return [
                 'success' => false,
                 'status' => $response->status(),
-                'error' => $response->json('message') ?? $response->body(),
+                'error' => is_array($data) ? ($data['message'] ?? $response->body()) : $response->body(),
             ];
+
         } catch (\Throwable $e) {
             Log::error("PhilSMS exception: {$e->getMessage()}");
 
