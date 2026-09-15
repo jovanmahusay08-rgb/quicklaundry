@@ -13,7 +13,7 @@ class Customer extends Authenticatable
     protected $table = 'customers';
 
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password', 'phone', 'profile_image',
+        'first_name', 'last_name', 'email', 'password', 'phone', 'phone_verified_at', 'profile_image',
         'address', 'barangay', 'is_active', 'loyalty_points', 'total_spent', 'last_login',
     ];
 
@@ -24,9 +24,16 @@ class Customer extends Authenticatable
         'total_spent' => 'decimal:2',
         'last_login' => 'datetime',
         'password' => 'hashed',
+        'phone_verified_at' => 'datetime',
     ];
 
+    public function isPhoneVerified(): bool
+    {
+        return $this->phone_verified_at !== null;
+    }
+
     public function getFullNameAttribute(): string
+
     {
         return trim("{$this->first_name} {$this->last_name}");
     }

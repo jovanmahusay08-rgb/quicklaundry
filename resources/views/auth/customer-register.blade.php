@@ -73,21 +73,51 @@
                 <form method="POST" action="{{ route('customer.register') }}" class="mt-6 space-y-4">
                     @csrf
                     <div class="grid gap-4 sm:grid-cols-2">
-                        <div><label for="first_name" class="mb-1.5 block text-xs font-bold text-[#16366d]">First Name</label><input id="first_name" type="text" name="first_name" value="{{ old('first_name') }}" required autocomplete="given-name" placeholder="First name" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400"></div>
-                        <div><label for="last_name" class="mb-1.5 block text-xs font-bold text-[#16366d]">Last Name</label><input id="last_name" type="text" name="last_name" value="{{ old('last_name') }}" required autocomplete="family-name" placeholder="Last name" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400"></div>
+                        <div>
+                            <label for="first_name" class="mb-1.5 block text-xs font-bold text-[#16366d]">First Name</label>
+                            <input id="first_name" type="text" name="first_name" value="{{ old('first_name', $pending['first_name'] ?? '') }}" required autocomplete="given-name" placeholder="First name" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400">
+                        </div>
+                        <div>
+                            <label for="last_name" class="mb-1.5 block text-xs font-bold text-[#16366d]">Last Name</label>
+                            <input id="last_name" type="text" name="last_name" value="{{ old('last_name', $pending['last_name'] ?? '') }}" required autocomplete="family-name" placeholder="Last name" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400">
+                        </div>
                     </div>
                     <div class="grid gap-4 sm:grid-cols-2">
-                        <div><label for="email" class="mb-1.5 block text-xs font-bold text-[#16366d]">Email Address</label><input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="you@example.com" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400"></div>
-                        <div><label for="phone" class="mb-1.5 block text-xs font-bold text-[#16366d]">Phone Number</label><input id="phone" type="tel" name="phone" value="{{ old('phone') }}" required autocomplete="tel" inputmode="numeric" minlength="11" maxlength="11" pattern="[0-9]{11}" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11)" placeholder="11-digit phone number" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400"><p class="mt-1 text-[.7rem] text-slate-400">Enter exactly 11 digits.</p></div>
+                        <div>
+                            <label for="email" class="mb-1.5 block text-xs font-bold text-[#16366d]">Email Address</label>
+                            <input id="email" type="email" name="email" value="{{ old('email', $pending['email'] ?? '') }}" required autocomplete="email" placeholder="you@example.com" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400">
+                        </div>
+                        <div>
+                            <label for="phone" class="mb-1.5 block text-xs font-bold text-[#16366d]">Mobile Number</label>
+                            <input id="phone" type="tel" name="phone" value="{{ old('phone', $pending['phone'] ?? '') }}" required autocomplete="tel" inputmode="numeric" minlength="11" maxlength="11" pattern="[0-9]{11}" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11)" placeholder="09XXXXXXXXX" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400">
+                            <p class="mt-1 text-[.7rem] text-slate-400">A 6-digit SMS OTP code will be sent to verify this number.</p>
+                        </div>
                     </div>
-                    <div><label for="address" class="mb-1.5 block text-xs font-bold text-[#16366d]">Complete Address</label><textarea id="address" name="address" rows="2" required autocomplete="street-address" placeholder="House number, street, and landmark" class="register-input w-full resize-none rounded-lg border border-slate-300 px-4 py-3 text-sm text-slate-700 placeholder:text-slate-400">{{ old('address') }}</textarea></div>
-                    <div><label for="barangay" class="mb-1.5 block text-xs font-bold text-[#16366d]">Barangay</label><select id="barangay" name="barangay" required class="register-input h-11 w-full rounded-lg border border-slate-300 bg-white px-4 text-sm text-slate-700"><option value="">Select your barangay</option>@foreach (['Balidbid','Bantigue','Langub','Maricaban','Okoy','Poblacion','Pooc','Talisay'] as $b)<option value="{{ $b }}" @selected(old('barangay') === $b)>{{ $b }}</option>@endforeach</select></div>
+                    <div>
+                        <label for="address" class="mb-1.5 block text-xs font-bold text-[#16366d]">Complete Address</label>
+                        <textarea id="address" name="address" rows="2" required autocomplete="street-address" placeholder="House number, street, and landmark" class="register-input w-full resize-none rounded-lg border border-slate-300 px-4 py-3 text-sm text-slate-700 placeholder:text-slate-400">{{ old('address', $pending['address'] ?? '') }}</textarea>
+                    </div>
+                    <div>
+                        <label for="barangay" class="mb-1.5 block text-xs font-bold text-[#16366d]">Barangay</label>
+                        <select id="barangay" name="barangay" required class="register-input h-11 w-full rounded-lg border border-slate-300 bg-white px-4 text-sm text-slate-700">
+                            <option value="">Select your barangay</option>
+                            @foreach (['Balidbid','Bantigue','Langub','Maricaban','Okoy','Poblacion','Pooc','Talisay'] as $b)
+                                <option value="{{ $b }}" @selected(old('barangay', $pending['barangay'] ?? '') === $b)>{{ $b }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="grid gap-4 sm:grid-cols-2">
-                        <div><label for="password" class="mb-1.5 block text-xs font-bold text-[#16366d]">Password</label><input id="password" type="password" name="password" required autocomplete="new-password" placeholder="Create password" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400"></div>
-                        <div><label for="password_confirmation" class="mb-1.5 block text-xs font-bold text-[#16366d]">Confirm Password</label><input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" placeholder="Repeat password" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400"></div>
+                        <div>
+                            <label for="password" class="mb-1.5 block text-xs font-bold text-[#16366d]">Password</label>
+                            <input id="password" type="password" name="password" required autocomplete="new-password" placeholder="Create password" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400">
+                        </div>
+                        <div>
+                            <label for="password_confirmation" class="mb-1.5 block text-xs font-bold text-[#16366d]">Confirm Password</label>
+                            <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" placeholder="Repeat password" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400">
+                        </div>
                     </div>
                     <button type="submit" class="flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#0d5fe9] text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition hover:-translate-y-0.5 hover:bg-[#084fc9]">
-                        Create My Account
+                        Continue to Mobile Verification
                         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
                     </button>
                 </form>

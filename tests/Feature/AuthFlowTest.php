@@ -34,9 +34,22 @@ class AuthFlowTest extends TestCase
             'barangay' => 'Poblacion',
         ]);
 
-        $response->assertRedirect('/customer/dashboard');
+        $response->assertRedirect(route('customer.register.otp'));
+
+        \Illuminate\Support\Facades\Cache::put('customer_registration_otp_09123456789', [
+            'code_hash' => \Illuminate\Support\Facades\Hash::make('123456'),
+            'attempts' => 0,
+            'expires_at' => now()->addMinutes(10)->timestamp,
+        ], now()->addMinutes(10));
+
+        $otpResponse = $this->post('/customer/register/verify-otp', [
+            'code' => '123456',
+        ]);
+
+        $otpResponse->assertRedirect('/customer/dashboard');
         $this->assertDatabaseHas('customers', ['email' => 'alice@example.com']);
         $this->assertAuthenticated('customer');
+
 
         $this->post('/customer/logout');
         $this->assertGuest('customer');

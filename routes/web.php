@@ -135,6 +135,10 @@ Route::prefix('customer')->name('customer.')->group(function () {
         Route::post('/login', [CustomerLoginController::class, 'login'])->middleware('throttle:10,1');
         Route::get('/register', [CustomerLoginController::class, 'showRegistrationForm'])->name('register');
         Route::post('/register', [CustomerLoginController::class, 'register'])->middleware('throttle:5,1');
+        Route::get('/register/verify-otp', [CustomerLoginController::class, 'showOtpForm'])->name('register.otp');
+        Route::post('/register/verify-otp', [CustomerLoginController::class, 'verifyOtp'])->middleware('throttle:10,1')->name('register.otp.verify');
+        Route::post('/register/resend-otp', [CustomerLoginController::class, 'resendOtp'])->middleware('throttle:3,1')->name('register.otp.resend');
+
         Route::get('/forgot-password', [PasswordResetCodeController::class, 'showRequestForm'])->defaults('portal', 'customer')->name('password.request');
         Route::post('/forgot-password', [PasswordResetCodeController::class, 'sendCode'])->defaults('portal', 'customer')->middleware('throttle:5,1')->name('password.email');
         Route::get('/verify-reset-code', [PasswordResetCodeController::class, 'showCodeForm'])->defaults('portal', 'customer')->name('password.code');

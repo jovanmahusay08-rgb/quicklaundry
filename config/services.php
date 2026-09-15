@@ -19,4 +19,11 @@ return [
         'number' => env('GCASH_NUMBER'),
         'qr_image' => env('GCASH_QR_IMAGE', 'images/payments/gcash-receiver-qr.jpg'),
     ],
+
+    'philsms' => [
+        'api_token' => env('PHILSMS_API_TOKEN'),
+        'sender_id' => env('PHILSMS_SENDER_ID', 'PhilSMS'),
+        'api_url' => env('PHILSMS_API_URL', 'https://dashboard.philsms.com/api/v3/sms/send'),
+    ],
 ];
+
