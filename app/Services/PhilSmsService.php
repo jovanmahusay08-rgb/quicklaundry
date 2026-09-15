@@ -13,7 +13,7 @@ class PhilSmsService
 
     public function __construct()
     {
-        $this->apiToken = config('services.philsms.api_token');
+        $this->apiToken = trim((string) config('services.philsms.api_token')) ?: null;
         $this->senderId = config('services.philsms.sender_id', 'PhilSMS') ?: 'PhilSMS';
         $this->apiUrl = config('services.philsms.api_url', 'https://dashboard.philsms.com/api/v3/sms/send') ?: 'https://dashboard.philsms.com/api/v3/sms/send';
     }
@@ -82,7 +82,6 @@ class PhilSmsService
                 'status' => $response->status(),
                 'error' => is_array($data) ? ($data['message'] ?? $response->body()) : $response->body(),
             ];
-
         } catch (\Throwable $e) {
             Log::error("PhilSMS exception: {$e->getMessage()}");
 
@@ -94,17 +93,20 @@ class PhilSmsService
     }
 
     /**
-     * Format and normalize a Philippine phone number into 09XXXXXXXXX format.
+     * Format and normalize a Philippine phone number into 639XXXXXXXXX format for PhilSMS.
      */
     public function formatPhoneNumber(string $phone): string
     {
         $cleaned = preg_replace('/[^0-9]/', '', $phone);
 
-        // Convert 639XXXXXXXXX to 09XXXXXXXXX
-        if (str_starts_with($cleaned, '63') && strlen($cleaned) === 12) {
-            $cleaned = '0' . substr($cleaned, 2);
+        // Convert 09XXXXXXXXX to 639XXXXXXXXX
+        if (str_starts_with($cleaned, '09') && strlen($cleaned) === 11) {
+            $cleaned = '63' . substr($cleaned, 1);
+        } elseif (str_starts_with($cleaned, '9') && strlen($cleaned) === 10) {
+            $cleaned = '63' . $cleaned;
         }
 
         return $cleaned;
     }
 }
+

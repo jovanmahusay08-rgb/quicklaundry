@@ -88,14 +88,15 @@ class CustomerRegistrationOtpTest extends TestCase
             'barangay' => 'Balidbid',
         ])->assertRedirect(route('customer.register.otp'));
 
-        Http::assertSent(function (\Illuminate\Http\Client\Request $request) use ($phone) {
+        Http::assertSent(function (\Illuminate\Http\Client\Request $request) {
             return $request->url() === 'https://dashboard.philsms.com/api/v3/sms/send'
                 && $request->hasHeader('Authorization', 'Bearer test-philsms-token')
-                && $request['recipient'] === $phone
+                && $request['recipient'] === '639181234567'
                 && $request['sender_id'] === 'QuickWash'
                 && $request['type'] === 'plain'
                 && str_contains($request['message'], 'QuickWash Express verification code');
         });
+
     }
 
     public function test_show_otp_form_displays_masked_phone(): void
