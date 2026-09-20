@@ -38,8 +38,8 @@
 </head>
 <body class="min-h-screen overflow-y-auto bg-slate-100 text-slate-800 {{ $isAndroidApp ? '' : 'pb-20 lg:pb-0' }}">
 <div class="min-h-screen lg:flex lg:items-start">
-    <aside class="hidden lg:sticky lg:top-0 lg:flex lg:h-screen lg:w-72 lg:shrink-0 bg-slate-950 text-white p-6 flex-col">
-        <div class="mb-10">
+    <aside class="hidden bg-slate-950 text-white lg:sticky lg:top-0 lg:flex lg:h-dvh lg:w-64 lg:shrink-0 lg:flex-col lg:overflow-hidden lg:px-4 lg:py-5 xl:w-72 xl:px-6 xl:py-6">
+        <div class="mb-6 shrink-0 xl:mb-8">
             <a href="{{ route('customer.dashboard') }}" class="flex items-center gap-3 mb-2">
                 <img src="{{ asset('images/quickwash-logo.png') }}" alt="QuickWash logo" class="h-12 w-12 rounded-full object-contain">
                 <div>
@@ -49,7 +49,7 @@
             </a>
         </div>
 
-        <nav class="space-y-2 flex-1 lg:min-h-0 lg:overflow-y-auto">
+        <nav class="min-h-0 flex-1 space-y-1.5 overflow-y-auto overscroll-contain pr-1 xl:space-y-2">
             <a href="{{ route('customer.dashboard') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors {{ request()->routeIs('customer.dashboard') ? 'bg-brand-500 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-800' }}">
                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M7 4v16"></path><path d="M17 4v16"></path></svg>
                 <span>Dashboard</span>
@@ -76,7 +76,7 @@
             </a>
         </nav>
 
-        <div class="p-2">
+        <div class="shrink-0 border-t border-slate-800 pt-4">
             <form method="POST" action="{{ route('customer.logout') }}">
                 @csrf
                 <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-800 px-4 py-3 text-sm font-semibold text-red-400 transition hover:bg-slate-700 hover:text-red-300">
