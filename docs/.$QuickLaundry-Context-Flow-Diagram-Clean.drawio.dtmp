@@ -1,0 +1,79 @@
+<mxfile host="Electron" agent="Codex">
+  <diagram id="quicklaundry-context-clean" name="Context Flow Diagram - Clean">
+    <mxGraphModel dx="2705" dy="1178" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1900" pageHeight="1250" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontFamily=Times New Roman;fontSize=26;fontStyle=1;" value="CONTEXT FLOW DIAGRAM (LEVEL 0)" vertex="1">
+          <mxGeometry height="40" width="900" x="500" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontFamily=Times New Roman;fontSize=16;fontStyle=1;" value="QUICKLAUNDRY MANAGEMENT SYSTEM" vertex="1">
+          <mxGeometry height="30" width="700" x="600" y="65" as="geometry" />
+        </mxCell>
+        <mxCell id="admin" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#000000;strokeWidth=2;fontFamily=Times New Roman;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" value="ADMINISTRATOR&lt;br&gt;&lt;font style=&quot;font-size:12px;font-weight:normal&quot;&gt;Management and monitoring&lt;/font&gt;" vertex="1">
+          <mxGeometry height="140" width="260" x="60" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="customer" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#000000;strokeWidth=2;fontFamily=Times New Roman;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" value="CUSTOMER&lt;br&gt;&lt;font style=&quot;font-size:12px;font-weight:normal&quot;&gt;Web portal and Android app&lt;/font&gt;" vertex="1">
+          <mxGeometry height="140" width="260" x="1580" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="processor" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#000000;strokeWidth=2;fontFamily=Times New Roman;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" value="PROCESSOR STAFF&lt;br&gt;&lt;font style=&quot;font-size:12px;font-weight:normal&quot;&gt;Laundry processing operations&lt;/font&gt;" vertex="1">
+          <mxGeometry height="140" width="260" x="60" y="880" as="geometry" />
+        </mxCell>
+        <mxCell id="driver" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#000000;strokeWidth=2;fontFamily=Times New Roman;fontSize=17;fontStyle=1;align=center;verticalAlign=middle;" value="DRIVER STAFF&lt;br&gt;&lt;font style=&quot;font-size:12px;font-weight:normal&quot;&gt;Pickup, delivery and collection&lt;/font&gt;" vertex="1">
+          <mxGeometry height="140" width="260" x="1580" y="880" as="geometry" />
+        </mxCell>
+        <mxCell id="system" parent="1" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=2.5;fontFamily=Times New Roman;fontSize=19;align=center;verticalAlign=middle;" value="0&lt;br&gt;&lt;br&gt;&lt;b&gt;QUICKLAUNDRY&lt;br&gt;MANAGEMENT SYSTEM&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;font style=&quot;font-size:13px&quot;&gt;Manages customer accounts, services,&lt;br&gt;bookings, staff assignments, laundry&lt;br&gt;status, pickup and delivery schedules,&lt;br&gt;payments, receipts and notifications&lt;/font&gt;" vertex="1">
+          <mxGeometry height="360" width="580" x="660" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="a_in_1" edge="1" parent="1" source="admin" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.30;entryX=0;entryY=0.14;" target="system" value="Login credentials and profile updates">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_in_2" edge="1" parent="1" source="admin" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.60;entryX=0;entryY=0.28;" target="system" value="Staff/service records, assignments and approvals">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_out_1" edge="1" parent="1" source="system" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.42;entryX=1;entryY=0.78;" target="admin" value="Dashboard, booking and customer records">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_out_2" edge="1" parent="1" source="system" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.56;entryX=1;entryY=0.92;" target="admin" value="Reports, payment records and notifications">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c_in_1" edge="1" parent="1" source="customer" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.30;entryX=1;entryY=0.14;" target="system" value="Registration/login and booking information">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c_in_2" edge="1" parent="1" source="customer" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.60;entryX=1;entryY=0.28;" target="system" value="Location, payment selection and payment proof">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c_out_1" edge="1" parent="1" source="system" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.42;entryX=0;entryY=0.78;" target="customer" value="Available services, prices and booking confirmation">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c_out_2" edge="1" parent="1" source="system" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.56;entryX=0;entryY=0.92;" target="customer" value="Order tracking, payment status, alerts and receipt">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p_in_1" edge="1" parent="1" source="processor" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.70;entryX=0;entryY=0.86;" target="system" value="Login credentials and processing status updates">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p_in_2" edge="1" parent="1" source="processor" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.40;entryX=0;entryY=0.72;" target="system" value="Delivery-driver assignment and completion details">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p_out_1" edge="1" parent="1" source="system" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.58;entryX=1;entryY=0.22;" target="processor" value="Assigned bookings and customer/service details">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="p_out_2" edge="1" parent="1" source="system" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.44;entryX=1;entryY=0.08;" target="processor" value="Work notifications and booking history">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d_in_1" edge="1" parent="1" source="driver" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.70;entryX=1;entryY=0.86;" target="system" value="Login credentials and pickup/delivery updates">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d_in_2" edge="1" parent="1" source="driver" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.40;entryX=1;entryY=0.72;" target="system" value="Payment confirmation and transaction details">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d_out_1" edge="1" parent="1" source="system" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.58;entryX=0;entryY=0.22;" target="driver" value="Pickup/delivery schedules and customer location">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d_out_2" edge="1" parent="1" source="system" style="edgeStyle=none;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.44;entryX=0;entryY=0.08;" target="driver" value="Assigned orders, payment details and notifications">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

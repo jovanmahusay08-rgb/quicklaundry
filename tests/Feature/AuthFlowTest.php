@@ -22,7 +22,12 @@ class AuthFlowTest extends TestCase
         config(['services.recaptcha.site_key' => 'test-site', 'services.recaptcha.secret_key' => 'test-secret']);
         \Illuminate\Support\Facades\Http::fake([
             'www.google.com/recaptcha/api/siteverify' => \Illuminate\Support\Facades\Http::response(['success' => true, 'hostname' => 'localhost']),
+            'api.semaphore.co/api/v4/otp' => \Illuminate\Support\Facades\Http::response([['message_id' => 123, 'status' => 'Pending']]),
         ]);
+        config(['services.semaphore.api_key' => 'test-sms-key']);
+        $this->postJson('/customer/register/send-phone-code', ['phone' => '09123456789', 'g-recaptcha-response' => 'valid-token'])->assertOk();
+        $smsRequest = \Illuminate\Support\Facades\Http::recorded(fn ($request) => str_contains($request->url(), 'semaphore.co'))->first()[0];
+        $this->postJson('/customer/register/verify-phone-code', ['phone' => '09123456789', 'code' => $smsRequest['code']])->assertOk();
         $response = $this->post('/customer/register', [
             'first_name' => 'Alice',
             'last_name' => 'Smith',

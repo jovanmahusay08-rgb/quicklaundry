@@ -73,51 +73,34 @@
                 <form method="POST" action="{{ route('customer.register') }}" class="mt-6 space-y-4">
                     @csrf
                     <div class="grid gap-4 sm:grid-cols-2">
-                        <div>
-                            <label for="first_name" class="mb-1.5 block text-xs font-bold text-[#16366d]">First Name</label>
-                            <input id="first_name" type="text" name="first_name" value="{{ old('first_name', $pending['first_name'] ?? '') }}" required autocomplete="given-name" placeholder="First name" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400">
-                        </div>
-                        <div>
-                            <label for="last_name" class="mb-1.5 block text-xs font-bold text-[#16366d]">Last Name</label>
-                            <input id="last_name" type="text" name="last_name" value="{{ old('last_name', $pending['last_name'] ?? '') }}" required autocomplete="family-name" placeholder="Last name" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400">
-                        </div>
+                        <div><label for="first_name" class="mb-1.5 block text-xs font-bold text-[#16366d]">First Name</label><input id="first_name" type="text" name="first_name" value="{{ old('first_name') }}" required autocomplete="given-name" placeholder="First name" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400"></div>
+                        <div><label for="last_name" class="mb-1.5 block text-xs font-bold text-[#16366d]">Last Name</label><input id="last_name" type="text" name="last_name" value="{{ old('last_name') }}" required autocomplete="family-name" placeholder="Last name" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400"></div>
                     </div>
                     <div class="grid gap-4 sm:grid-cols-2">
-                        <div>
-                            <label for="email" class="mb-1.5 block text-xs font-bold text-[#16366d]">Email Address</label>
-                            <input id="email" type="email" name="email" value="{{ old('email', $pending['email'] ?? '') }}" required autocomplete="email" placeholder="you@example.com" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400">
+                        <div><label for="email" class="mb-1.5 block text-xs font-bold text-[#16366d]">Email Address</label><input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="you@example.com" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400"></div>
+                        <div><label for="phone" class="mb-1.5 block text-xs font-bold text-[#16366d]">Phone Number</label><input id="phone" type="tel" name="phone" value="{{ old('phone') }}" required autocomplete="tel" inputmode="numeric" minlength="11" maxlength="11" pattern="[0-9]{11}" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11)" placeholder="11-digit phone number" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400"><p class="mt-1 text-[.7rem] text-slate-400">Enter exactly 11 digits.</p></div>
+                    </div>
+                    <div class="space-y-3 rounded-lg border border-blue-100 bg-blue-50/50 p-4">
+                        <p class="text-xs text-slate-600">Verify your Philippine mobile number (09XXXXXXXXX) before creating your account. Complete reCAPTCHA, then request an SMS code.</p>
+                        @include('auth.partials.recaptcha')
+                        <button id="send-phone-code" type="button" class="rounded-lg bg-[#0d5fe9] px-4 py-2 text-sm font-bold text-white disabled:opacity-50">Send OTP</button>
+                        <div class="flex flex-wrap items-end gap-2">
+                            <div class="min-w-0 flex-1">
+                                <label for="phone-code" class="mb-1.5 block text-xs font-bold text-[#16366d]">SMS verification code</label>
+                                <input id="phone-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="6-digit code" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm">
+                            </div>
+                            <button id="verify-phone-code" type="button" class="h-11 rounded-lg border border-blue-200 px-4 text-sm font-bold text-[#0d5fe9] disabled:opacity-50">Verify code</button>
                         </div>
-                        <div>
-                            <label for="phone" class="mb-1.5 block text-xs font-bold text-[#16366d]">Mobile Number</label>
-                            <input id="phone" type="tel" name="phone" value="{{ old('phone', $pending['phone'] ?? '') }}" required autocomplete="tel" inputmode="numeric" minlength="11" maxlength="11" pattern="[0-9]{11}" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 11)" placeholder="09XXXXXXXXX" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400">
-                            <p class="mt-1 text-[.7rem] text-slate-400">A 6-digit SMS OTP code will be sent to verify this number.</p>
-                        </div>
+                        <p id="phone-verification-status" class="text-xs text-slate-600" role="status" aria-live="polite">Codes expire after 5 minutes. Wait 60 seconds between code requests.</p>
                     </div>
-                    <div>
-                        <label for="address" class="mb-1.5 block text-xs font-bold text-[#16366d]">Complete Address</label>
-                        <textarea id="address" name="address" rows="2" required autocomplete="street-address" placeholder="House number, street, and landmark" class="register-input w-full resize-none rounded-lg border border-slate-300 px-4 py-3 text-sm text-slate-700 placeholder:text-slate-400">{{ old('address', $pending['address'] ?? '') }}</textarea>
-                    </div>
-                    <div>
-                        <label for="barangay" class="mb-1.5 block text-xs font-bold text-[#16366d]">Barangay</label>
-                        <select id="barangay" name="barangay" required class="register-input h-11 w-full rounded-lg border border-slate-300 bg-white px-4 text-sm text-slate-700">
-                            <option value="">Select your barangay</option>
-                            @foreach (['Balidbid','Bantigue','Langub','Maricaban','Okoy','Poblacion','Pooc','Talisay'] as $b)
-                                <option value="{{ $b }}" @selected(old('barangay', $pending['barangay'] ?? '') === $b)>{{ $b }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <div><label for="address" class="mb-1.5 block text-xs font-bold text-[#16366d]">Complete Address</label><textarea id="address" name="address" rows="2" required autocomplete="street-address" placeholder="House number, street, and landmark" class="register-input w-full resize-none rounded-lg border border-slate-300 px-4 py-3 text-sm text-slate-700 placeholder:text-slate-400">{{ old('address') }}</textarea></div>
+                    <div><label for="barangay" class="mb-1.5 block text-xs font-bold text-[#16366d]">Barangay</label><select id="barangay" name="barangay" required class="register-input h-11 w-full rounded-lg border border-slate-300 bg-white px-4 text-sm text-slate-700"><option value="">Select your barangay</option>@foreach (['Balidbid','Bantigue','Langub','Maricaban','Okoy','Poblacion','Pooc','Talisay'] as $b)<option value="{{ $b }}" @selected(old('barangay') === $b)>{{ $b }}</option>@endforeach</select></div>
                     <div class="grid gap-4 sm:grid-cols-2">
-                        <div>
-                            <label for="password" class="mb-1.5 block text-xs font-bold text-[#16366d]">Password</label>
-                            <input id="password" type="password" name="password" required autocomplete="new-password" placeholder="Create password" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400">
-                        </div>
-                        <div>
-                            <label for="password_confirmation" class="mb-1.5 block text-xs font-bold text-[#16366d]">Confirm Password</label>
-                            <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" placeholder="Repeat password" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400">
-                        </div>
+                        <div><label for="password" class="mb-1.5 block text-xs font-bold text-[#16366d]">Password</label><input id="password" type="password" name="password" required autocomplete="new-password" placeholder="Create password" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400"></div>
+                        <div><label for="password_confirmation" class="mb-1.5 block text-xs font-bold text-[#16366d]">Confirm Password</label><input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" placeholder="Repeat password" class="register-input h-11 w-full rounded-lg border border-slate-300 px-4 text-sm text-slate-700 placeholder:text-slate-400"></div>
                     </div>
                     <button type="submit" class="flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#0d5fe9] text-sm font-bold text-white shadow-lg shadow-blue-500/20 transition hover:-translate-y-0.5 hover:bg-[#084fc9]">
-                        Continue to Mobile Verification
+                        Create My Account
                         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
                     </button>
                 </form>
@@ -129,4 +112,74 @@
         <p class="mt-6 text-center text-xs font-medium text-slate-500">&copy; {{ date('Y') }} QuickWash Express. All rights reserved.</p>
     </div>
 </main>
+<script>
+(() => {
+    const phone = document.getElementById('phone');
+    const code = document.getElementById('phone-code');
+    const send = document.getElementById('send-phone-code');
+    const verify = document.getElementById('verify-phone-code');
+    const status = document.getElementById('phone-verification-status');
+    const csrf = document.querySelector('input[name="_token"]').value;
+    let busy = false;
+    let cooldown = 0;
+    const show = (message, error = false) => {
+        status.textContent = message;
+        status.className = error ? 'text-xs text-red-700' : 'text-xs text-slate-600';
+    };
+    const updateButtons = () => {
+        send.disabled = busy || cooldown > 0;
+        verify.disabled = busy;
+        send.textContent = cooldown > 0 ? `Resend in ${cooldown}s` : 'Send OTP';
+    };
+    setInterval(() => {
+        if (cooldown > 0) { cooldown--; updateButtons(); }
+    }, 1000);
+    phone.addEventListener('input', () => {
+        code.value = '';
+        show('Verify this phone number before creating your account.');
+    });
+    code.addEventListener('input', () => { code.value = code.value.replace(/[^0-9]/g, '').slice(0, 6); });
+    async function post(url, payload) {
+        const response = await fetch(url, {
+            method: 'POST', credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': csrf },
+            body: JSON.stringify(payload),
+        });
+        let data;
+        try { data = await response.json(); } catch {
+            throw new Error('Unable to process verification. Refresh the page and try again.');
+        }
+        if (!response.ok) {
+            throw new Error(response.status === 429 ? 'Too many requests. Please wait before trying again.' : (Object.values(data.errors || {}).flat()[0] || data.message || 'Verification failed. Please try again.'));
+        }
+        return data;
+    }
+    async function request(isSend) {
+        if (busy) return;
+        const number = phone.value;
+        if (!/^09[0-9]{9}$/.test(number)) { show('Enter a valid 11-digit Philippine mobile number starting with 09.', true); return; }
+        const token = window.grecaptcha ? window.grecaptcha.getResponse() : '';
+        if (isSend && !token) { show('Please complete reCAPTCHA before requesting an SMS code.', true); return; }
+        if (!isSend && !/^[0-9]{6}$/.test(code.value)) { show('Enter the six-digit code from your SMS.', true); return; }
+        busy = true;
+        updateButtons();
+        show(isSend ? 'Sending your code…' : 'Verifying your code…');
+        try {
+            const data = await post(isSend ? @json(route('customer.register.phone.send')) : @json(route('customer.register.phone.verify')), {
+                phone: number, ...(isSend ? { 'g-recaptcha-response': token } : { code: code.value }),
+            });
+            if (isSend) { cooldown = 60; code.value = ''; }
+            show(phone.value === number ? data.message : 'Your number changed. Request a code for the new number.');
+        } catch (error) {
+            show(error.message || 'Unable to connect. Please try again.', true);
+        } finally {
+            if (isSend && window.grecaptcha) window.grecaptcha.reset();
+            busy = false;
+            updateButtons();
+        }
+    }
+    send.addEventListener('click', () => request(true));
+    verify.addEventListener('click', () => request(false));
+})();
+</script>
 @endsection

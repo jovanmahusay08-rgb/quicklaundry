@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-09-18T00:00:00.000Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="quicklaundry-context" name="Context Flow Diagram - Level 0">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="CONTEXT FLOW DIAGRAM (LEVEL 0)" style="text;html=1;align=center;verticalAlign=middle;fontFamily=Times New Roman;fontSize=24;fontStyle=1;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="400" y="25" width="800" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="subtitle" value="QuickLaundry Management System" style="text;html=1;align=center;verticalAlign=middle;fontFamily=Times New Roman;fontSize=15;fontStyle=2;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="500" y="65" width="600" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="admin" value="ADMINISTRATOR&lt;br&gt;&lt;font style=&quot;font-size: 12px; font-weight: normal;&quot;&gt;(Management Portal)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F2F2F2;strokeColor=#000000;strokeWidth=2;fontFamily=Times New Roman;fontSize=16;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="80" y="180" width="240" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="customer" value="CUSTOMER&lt;br&gt;&lt;font style=&quot;font-size: 12px; font-weight: normal;&quot;&gt;(Web and Android App)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F2F2F2;strokeColor=#000000;strokeWidth=2;fontFamily=Times New Roman;fontSize=16;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1280" y="180" width="240" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="processor" value="PROCESSOR STAFF&lt;br&gt;&lt;font style=&quot;font-size: 12px; font-weight: normal;&quot;&gt;(Laundry Operations)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F2F2F2;strokeColor=#000000;strokeWidth=2;fontFamily=Times New Roman;fontSize=16;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="80" y="760" width="240" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="driver" value="DRIVER STAFF&lt;br&gt;&lt;font style=&quot;font-size: 12px; font-weight: normal;&quot;&gt;(Pickup and Delivery)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F2F2F2;strokeColor=#000000;strokeWidth=2;fontFamily=Times New Roman;fontSize=16;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1280" y="760" width="240" height="130" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="system" value="0&lt;br&gt;&lt;br&gt;&lt;b&gt;QUICKLAUNDRY&lt;br&gt;MANAGEMENT SYSTEM&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;Booking, Laundry Processing,&lt;br&gt;Pickup, Delivery, Payment,&lt;br&gt;Tracking and Notifications&lt;/font&gt;" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;strokeWidth=2;fontFamily=Times New Roman;fontSize=18;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="570" y="390" width="460" height="280" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a1" value="Credentials • Staff/Service Data • Assignments • Payment Approval" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.35;exitDx=0;exitDy=0;entryX=0;entryY=0.18;entryDx=0;entryDy=0;" edge="1" parent="1" source="admin" target="system">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="400" y="226"/><mxPoint x="400" y="440"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="a2" value="Dashboard • Booking/Customer Records • Reports • Notifications" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.35;exitDx=0;exitDy=0;entryX=1;entryY=0.72;entryDx=0;entryDy=0;" edge="1" parent="1" source="system" target="admin">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="470" y="592"/><mxPoint x="470" y="265"/></Array></mxGeometry>
+        </mxCell>
+
+        <mxCell id="c1" value="Registration/Login • Booking Details • Location • Payment Proof" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.35;exitDx=0;exitDy=0;entryX=1;entryY=0.18;entryDx=0;entryDy=0;" edge="1" parent="1" source="customer" target="system">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1200" y="226"/><mxPoint x="1200" y="440"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="c2" value="Services/Prices • Booking and Payment Status • Tracking • Receipt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.72;exitDx=0;exitDy=0;entryX=0;entryY=0.65;entryDx=0;entryDy=0;" edge="1" parent="1" source="system" target="customer">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1130" y="592"/><mxPoint x="1130" y="265"/></Array></mxGeometry>
+        </mxCell>
+
+        <mxCell id="p1" value="Credentials • Processing Status Updates • Driver Assignment" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.65;exitDx=0;exitDy=0;entryX=0;entryY=0.82;entryDx=0;entryDy=0;" edge="1" parent="1" source="processor" target="system">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="400" y="845"/><mxPoint x="400" y="620"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="p2" value="Assigned Bookings • Customer/Service Details • Notifications" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.65;exitDx=0;exitDy=0;entryX=1;entryY=0.35;entryDx=0;entryDy=0;" edge="1" parent="1" source="system" target="processor">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="470" y="488"/><mxPoint x="470" y="805"/></Array></mxGeometry>
+        </mxCell>
+
+        <mxCell id="d1" value="Credentials • Pickup/Delivery Status • Payment Confirmation" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.65;exitDx=0;exitDy=0;entryX=1;entryY=0.82;entryDx=0;entryDy=0;" edge="1" parent="1" source="driver" target="system">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1200" y="845"/><mxPoint x="1200" y="620"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="d2" value="Pickup/Delivery Schedule • Customer Location • Payment Details" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.35;exitDx=0;exitDy=0;entryX=0;entryY=0.35;entryDx=0;entryDy=0;" edge="1" parent="1" source="system" target="driver">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1130" y="488"/><mxPoint x="1130" y="805"/></Array></mxGeometry>
+        </mxCell>
+
+        <mxCell id="legend" value="External Entity" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F2F2F2;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="570" y="970" width="140" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend2" value="0&#160;&#160; System Process" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="730" y="970" width="160" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="legend3" value="Data Flow" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=12;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="legend2">
+          <mxGeometry relative="1" as="geometry"><mxPoint x="1050" y="993" as="targetPoint"/></mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

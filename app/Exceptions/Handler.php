@@ -11,6 +11,8 @@ class Handler extends ExceptionHandler
         'current_password',
         'password',
         'password_confirmation',
+        'code',
+        'g-recaptcha-response',
     ];
 
     public function register(): void
