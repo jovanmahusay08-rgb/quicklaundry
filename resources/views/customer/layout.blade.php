@@ -36,10 +36,10 @@
         }
     </style>
 </head>
-<body class="min-h-screen overflow-y-auto bg-slate-100 text-slate-800 {{ $isAndroidApp ? '' : 'pb-20 lg:pb-0' }}">
-<div class="min-h-screen lg:flex lg:min-h-dvh lg:items-start">
-    <aside class="hidden bg-slate-950 text-white lg:sticky lg:top-0 lg:flex lg:h-screen lg:h-dvh lg:w-60 lg:shrink-0 lg:flex-col lg:overflow-hidden lg:px-3 lg:py-4 xl:w-64 xl:px-4 xl:py-5">
-        <div class="mb-5 shrink-0 xl:mb-6">
+<body class="min-h-screen overflow-y-auto bg-slate-100 text-slate-800 lg:h-screen lg:overflow-hidden {{ $isAndroidApp ? '' : 'pb-20 lg:pb-0' }}">
+<div class="min-h-screen lg:flex lg:h-screen">
+    <aside class="hidden bg-slate-950 text-white lg:static lg:flex lg:h-screen lg:h-dvh lg:w-72 lg:shrink-0 lg:flex-col lg:overflow-hidden lg:px-6 lg:py-6">
+        <div class="mb-6 shrink-0">
             <a href="{{ route('customer.dashboard') }}" class="flex items-center gap-3 mb-2">
                 <img src="{{ asset('images/quickwash-logo.png') }}" alt="QuickWash logo" class="h-12 w-12 rounded-full object-contain">
                 <div>
@@ -49,7 +49,7 @@
             </a>
         </div>
 
-        <nav class="min-h-0 flex-1 space-y-1.5 overflow-y-auto overscroll-contain pr-1 xl:space-y-2">
+        <nav class="min-h-0 flex-1 space-y-1.5 overflow-y-auto overscroll-contain pr-1">
             <a href="{{ route('customer.dashboard') }}" class="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors {{ request()->routeIs('customer.dashboard') ? 'bg-brand-500 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-800' }}">
                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M7 4v16"></path><path d="M17 4v16"></path></svg>
                 <span>Dashboard</span>
@@ -87,8 +87,8 @@
         </div>
     </aside>
 
-    <div class="min-w-0 flex-1">
-        <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur lg:static lg:bg-white/80 lg:shadow-none">
+    <div class="min-w-0 flex flex-1 flex-col lg:h-screen lg:overflow-y-auto">
+        <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur lg:bg-white/80 lg:shadow-none">
             <div class="px-4 py-3 sm:px-6 sm:py-4">
                 <div class="flex items-center justify-between">
                     <div class="min-w-0 pr-2">
@@ -157,7 +157,7 @@
             </div>
         </header>
 
-        <main class="customer-content min-w-0 p-4 sm:p-6">
+        <main class="customer-content min-w-0 flex-1 p-4 sm:p-6">
             @yield('content')
         </main>
     </div>
