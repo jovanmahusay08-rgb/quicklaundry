@@ -37,9 +37,9 @@
     </style>
 </head>
 <body class="min-h-screen overflow-y-auto bg-slate-100 text-slate-800 {{ $isAndroidApp ? '' : 'pb-20 lg:pb-0' }}">
-<div class="min-h-screen lg:flex lg:items-start">
-    <aside class="hidden bg-slate-950 text-white lg:sticky lg:top-0 lg:flex lg:h-dvh lg:w-64 lg:shrink-0 lg:flex-col lg:overflow-hidden lg:px-4 lg:py-5 xl:w-72 xl:px-6 xl:py-6">
-        <div class="mb-6 shrink-0 xl:mb-8">
+<div class="min-h-screen lg:flex lg:min-h-dvh lg:items-start">
+    <aside class="hidden bg-slate-950 text-white lg:sticky lg:top-0 lg:flex lg:h-screen lg:h-dvh lg:w-60 lg:shrink-0 lg:flex-col lg:overflow-hidden lg:px-3 lg:py-4 xl:w-64 xl:px-4 xl:py-5">
+        <div class="mb-5 shrink-0 xl:mb-6">
             <a href="{{ route('customer.dashboard') }}" class="flex items-center gap-3 mb-2">
                 <img src="{{ asset('images/quickwash-logo.png') }}" alt="QuickWash logo" class="h-12 w-12 rounded-full object-contain">
                 <div>
